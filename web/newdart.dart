@@ -10,21 +10,18 @@ class testApplication {
 
   testApplication(){
 
+    CanvasElement screenCanvas;
+    CanvasRenderingContext2D screen;
+    final int width = 400, height = 300;
+
+
     document.getElementById("viewContainer").append(this.renderer.view);
-
-    this.tex.anchor = new Point(0.5, 0.5);
-    this.tex.position = new Point(300,300);
-    this.tex.visible = true;
-
     querySelector("#text").text = "This Should change";
 
-    tex.onMouseDown.listen((e)	{ tex.alpha = 0.9; tex.dragging = true; });
-    tex.onTouchStart.listen((e)	{ tex.alpha = 0.9; tex.dragging = true; });
-    tex.onMouseUp.listen((e) 		{ tex.alpha = 1.0; tex.dragging = false; });
-    tex.onTouchEnd.listen((e) 	{ tex.alpha = 1.0; tex.dragging = false; });
-    tex.onMouseMove.listen((e)	{ if (tex.dragging) tex.position = new Point(e.x, e.y); });
-    tex.onTouchMove.listen((e)	{ if (tex.dragging) tex.position = new Point(e.x, e.y); });
-
+    tex
+      ..anchor = new Point(0.5, 0.5)
+      ..position = new Point(300,300)
+      ..visible = true;
 
     this.stage.children.add(this.tex);
 
@@ -33,9 +30,10 @@ class testApplication {
 
   }
 
-  void changeText(){
+  void changeText(Event event){
+
     i++;
-    querySelector("#text").text = "This has changed! Iteration ("+i.toString()+")";
+    querySelector("#text").text = event.toString();
 
   }
 
@@ -44,6 +42,7 @@ class testApplication {
 
 
     window.requestAnimationFrame(this._animate);
+    this.tex.rotation += 0.1;
     this.renderer.render(this.stage);
 
   }
