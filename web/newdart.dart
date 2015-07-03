@@ -4,7 +4,7 @@ import 'package:pixi/pixi.dart';
 class testApplication {
 
   var renderer = new CanvasRenderer(width: 800, height: 800);
-  var stage = new Stage(new Colour.fromHtml('#6f9'));
+  var stage = new Stage(new Colour.fromHtml('#f69'));
   var tex = new List(9);
   var holder = new DisplayObjectContainer();
 
@@ -30,12 +30,12 @@ class testApplication {
     }
     tex[0].position = new Point(0,0);
     tex[1].position = new Point(-200,-200);
-    tex[2].position = new Point(-200,0);
+    tex[2].position = new Point(-282,0);
     tex[3].position = new Point(-200,200);
-    tex[4].position = new Point(0,-200);
-    tex[5].position = new Point(0,200);
+    tex[4].position = new Point(0,-282);
+    tex[5].position = new Point(0,282);
     tex[6].position = new Point(200,-200);
-    tex[7].position = new Point(200,0);
+    tex[7].position = new Point(282,0);
     tex[8].position = new Point(200,200);
 
 
