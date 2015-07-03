@@ -1,0 +1,9 @@
+name: newDart
+version: 0.0.1
+description: A sample web application
+dependencies:
+  browser: any
+  vector_math: any
+  pixi: any
+dev_dependencies:
+#  unittest: any
