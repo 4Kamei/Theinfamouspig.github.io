@@ -11,8 +11,12 @@ h1, p {
     color: #333;
 }
 
+#viewContainer{
+    width: auto;
+    height: auto;
+    align-content: center;
+}
 #text {
-    float: right;
     width: 120px;
-    text-align: right;
+    text-align: left;
 }
