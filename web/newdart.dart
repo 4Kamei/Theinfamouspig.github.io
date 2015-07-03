@@ -3,37 +3,49 @@ import 'package:pixi/pixi.dart';
 
 class testApplication {
 
-  var renderer = new CanvasRenderer(width: 800, height: 600);
+  var renderer = new CanvasRenderer(width: 800, height: 800);
   var stage = new Stage(new Colour.fromHtml('#6f9'));
-  var tex = new Sprite.fromImage('res/texture.png');
-  int i = 0;
+  var tex = new List(9);
+  var holder = new DisplayObjectContainer();
 
   testApplication(){
 
-    CanvasElement screenCanvas;
-    CanvasRenderingContext2D screen;
-    final int width = 400, height = 300;
+    for(int j = 0; j < 9; j++){
+      print(j);
+      tex[j] = new Sprite.fromImage('res/texture.png');
+    }
 
 
     document.getElementById("viewContainer").append(this.renderer.view);
     querySelector("#text").text = "This Should change";
 
-    tex
-      ..anchor = new Point(0.5, 0.5)
-      ..position = new Point(300,300)
-      ..visible = true;
 
-    this.stage.children.add(this.tex);
 
+    holder.position = new Point(400,400);
+
+    for(int j = 0; j < 9; j++){
+      tex[j].anchor = new Point(0.5,0.5);
+      holder.children.add(tex[j]);
+
+    }
+    tex[0].position = new Point(0,0);
+    tex[1].position = new Point(-200,-200);
+    tex[2].position = new Point(-200,0);
+    tex[3].position = new Point(-200,200);
+    tex[4].position = new Point(0,-200);
+    tex[5].position = new Point(0,200);
+    tex[6].position = new Point(200,-200);
+    tex[7].position = new Point(200,0);
+    tex[8].position = new Point(200,200);
+
+
+    for(int j = 0; j < 9; j++) {
+      tex[j].anchor = new Point(0.5, 0.5);
+      holder.children.add(tex[j]);
+    }
+    stage.children.add(holder);
 
     window.requestAnimationFrame(this._animate);
-
-  }
-
-  void changeText(Event event){
-
-    i++;
-    querySelector("#text").text = event.toString();
 
   }
 
@@ -42,7 +54,10 @@ class testApplication {
 
 
     window.requestAnimationFrame(this._animate);
-    this.tex.rotation += 0.1;
+    for(int j = 0; j < 9; j++)
+      tex[j].rotation += 0.03;
+    tex[0].rotation += 0.03;
+    holder.rotation -= 0.03;
     this.renderer.render(this.stage);
 
   }
