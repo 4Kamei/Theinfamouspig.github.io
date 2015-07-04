@@ -16,6 +16,11 @@ h1, p {
     height: auto;
     align-content: center;
 }
+
+#audio{
+    display: none;
+    visibility: hidden;
+}
 #text {
     width: 120px;
     text-align: left;

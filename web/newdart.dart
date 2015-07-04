@@ -51,15 +51,12 @@ class testApplication {
 
   void _animate(var num)
   {
-
-
     window.requestAnimationFrame(this._animate);
     for(int j = 0; j < 9; j++)
       tex[j].rotation += 0.03;
     tex[0].rotation += 0.03;
     holder.rotation -= 0.03;
     this.renderer.render(this.stage);
-
   }
 
   void bind(){
