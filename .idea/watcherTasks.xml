@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectTasksOptions">
+    <TaskOptions isEnabled="true">
+      <option name="arguments" value="--out=$FilePath$.js $FilePath$" />
+      <option name="checkSyntaxErrors" value="true" />
+      <option name="description" value="Dart to Javascript" />
+      <option name="exitCodeBehavior" value="ERROR" />
+      <option name="fileExtension" value="UNKNOWN" />
+      <option name="immediateSync" value="true" />
+      <option name="name" value="Dart2JS" />
+      <option name="output" value="Output paths: $FileName$.js:$FileName$.js.map:$FileName$.js.deps" />
+      <option name="outputFilters">
+        <array />
+      </option>
+      <option name="outputFromStdout" value="false" />
+      <option name="passParentEnvs" value="true" />
+      <option name="program" value="$USER_HOME$/Downloads/dartsdk-windows-x64-release/dart-sdk/bin/dart2js.bat" />
+      <option name="scopeName" value="dart" />
+      <option name="trackOnlyRoot" value="false" />
+      <option name="workingDir" value="Working directory: $FileDir$" />
+      <envs />
+    </TaskOptions>
+  </component>
+</project>
