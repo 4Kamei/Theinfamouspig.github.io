@@ -24,4 +24,6 @@ h1, p {
 #text {
     width: 120px;
     text-align: left;
+    visibility: hidden;
+    display: none;
 }
