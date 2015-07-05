@@ -7,8 +7,17 @@ class testApplication {
   var stage = new Stage(new Colour.fromHtml('#553333'));
   var tex = new List(9);
   var holder = new DisplayObjectContainer();
+  int i = 0;
+  int lastFrame;
+  int thisFrame;
+  int timeDiff;
+  double fps;
+
+  DateTime dateTime;
 
   testApplication(){
+
+    document.getElementById("audio").setAttribute("voudlme", "0.0");
 
     for(int j = 0; j < 9; j++){
       print(j);
@@ -17,7 +26,6 @@ class testApplication {
 
 
     document.getElementById("viewContainer").append(this.renderer.view);
-    querySelector("#text").text = "This Should change";
 
     holder.position = new Point(400,400);
 
@@ -41,14 +49,18 @@ class testApplication {
       holder.children.add(tex[j]);
     }
 
+    dateTime = new DateTime.now();
     stage.children.add(holder);
+    lastFrame = dateTime.millisecondsSinceEpoch;
     window.requestAnimationFrame(this._animate);
-
   }
 
   void _animate(var num)
   {
+    dateTime = new DateTime.now();
     window.requestAnimationFrame(this._animate);
+
+    thisFrame = dateTime.millisecondsSinceEpoch;
     for(int j = 0; j < 9; j++){
       tex[j].rotation += 0.03;
     }
@@ -56,6 +68,12 @@ class testApplication {
 
     holder.rotation -= 0.03;
     this.renderer.render(this.stage);
+    timeDiff = thisFrame - lastFrame;
+    lastFrame = thisFrame;
+    fps = 1000/timeDiff;
+    querySelector("#text").text = "FPS : " + (fps).round().toString();
+
+
   }
 
   void bind(){
