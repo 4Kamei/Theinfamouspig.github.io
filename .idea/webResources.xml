@@ -7,6 +7,7 @@
           <resourceRoots>
             <path value="file://$PROJECT_DIR$/web/res" />
             <path value="file://$PROJECT_DIR$/build/web/res" />
+            <path value="file://$PROJECT_DIR$/res" />
           </resourceRoots>
         </entryData>
       </entry>
