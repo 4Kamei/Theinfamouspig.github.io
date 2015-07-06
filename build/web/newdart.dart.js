@@ -375,7 +375,7 @@ yu:function(a){var z
 if(a>=-2147483648&&a<=2147483647)return a|0
 if(isFinite(a)){z=a<0?Math.ceil(a):Math.floor(a)
 return z+0}throw H.b(new P.ub(""+a))},
-HG:function(a){if(a>0){if(a!==1/0)return Math.round(a)}else if(a>-1/0)return 0-Math.round(0-a)
+zQ:function(a){if(a>0){if(a!==1/0)return Math.round(a)}else if(a>-1/0)return 0-Math.round(0-a)
 throw H.b(new P.ub(""+a))},
 Hp:function(a){return a},
 WZ:function(a,b){var z,y,x,w
@@ -1063,6 +1063,8 @@ if(z==="Object"){y=String(a.constructor).match(/^\s*function\s*([\w$]*)\s*\(/)[1
 if(typeof y==="string")z=/^\w+$/.test(y)?y:z}if(z.length>1&&C.U.O2(z,0)===36)z=C.U.yn(z,1)
 return(z+H.ia(H.oX(a),0,null)).replace(/[^<,> ]+/g,function(b){return init.mangledGlobalNames[b]||b})},
 H9:function(a){return"Instance of '"+H.lh(a)+"'"},
+o2:function(a){if(a.date===void 0)a.date=new Date(a.Q)
+return a.date},
 VK:function(a,b){if(a==null||typeof a==="boolean"||typeof a==="number"||typeof a==="string")throw H.b(H.aL(a))
 return a[b]},
 aw:function(a,b,c){if(a==null||typeof a==="boolean"||typeof a==="number"||typeof a==="string")throw H.b(H.aL(a))
@@ -2866,7 +2868,7 @@ this.e=z}++this.Q
 this.f=this.f+1&67108863
 return z},
 GS:function(a){var z,y
-z=a.gzQ()
+z=a.gOx()
 y=a.a
 if(z==null)this.d=y
 else z.a=y
@@ -2885,7 +2887,7 @@ z["<non-identifier-key>"]=z
 delete z["<non-identifier-key>"]
 return z}}},
 tj:{
-"^":"a;dA:Q<,a,zQ:b<"},
+"^":"a;dA:Q<,a,Ox:b<"},
 zQ:{
 "^":"a;Q,a,b,c",
 gk:function(){return this.c},
@@ -3031,7 +3033,36 @@ a2:{
 "^":"a;"},
 "+bool":0,
 iP:{
-"^":"a;"},
+"^":"a;Q,a",
+m:function(a,b){if(b==null)return!1
+if(!(b instanceof P.iP))return!1
+return this.Q===b.Q&&this.a===b.a},
+giO:function(a){return this.Q},
+X:function(a){var z,y,x,w,v,u,t,s
+z=this.a
+y=P.Gq(z?H.o2(this).getUTCFullYear()+0:H.o2(this).getFullYear()+0)
+x=P.h0(z?H.o2(this).getUTCMonth()+1:H.o2(this).getMonth()+1)
+w=P.h0(z?H.o2(this).getUTCDate()+0:H.o2(this).getDate()+0)
+v=P.h0(z?H.o2(this).getUTCHours()+0:H.o2(this).getHours()+0)
+u=P.h0(z?H.o2(this).getUTCMinutes()+0:H.o2(this).getMinutes()+0)
+t=P.h0(z?H.o2(this).getUTCSeconds()+0:H.o2(this).getSeconds()+0)
+s=P.Vx(z?H.o2(this).getUTCMilliseconds()+0:H.o2(this).getMilliseconds()+0)
+if(z)return y+"-"+x+"-"+w+" "+v+":"+u+":"+t+"."+s+"Z"
+else return y+"-"+x+"-"+w+" "+v+":"+u+":"+t+"."+s},
+h:function(a,b){return P.Wu(C.jn.g(this.Q,b.gVs()),this.a)},
+RM:function(a,b){if(Math.abs(a)>864e13)throw H.b(P.p(a))},
+static:{Wu:function(a,b){var z=new P.iP(a,b)
+z.RM(a,b)
+return z},Gq:function(a){var z,y
+z=Math.abs(a)
+y=a<0?"-":""
+if(z>=1000)return""+a
+if(z>=100)return y+"0"+H.d(z)
+if(z>=10)return y+"00"+H.d(z)
+return y+"000"+H.d(z)},Vx:function(a){if(a>=100)return""+a
+if(a>=10)return"0"+a
+return"00"+a},h0:function(a){if(a>=10)return""+a
+return"0"+a}}},
 CP:{
 "^":"lf;"},
 "+double":0,
@@ -3318,7 +3349,7 @@ $astn:HU,
 "%":";DOMRectReadOnly"},
 cv:{
 "^":"KV;",
-gwl:function(a){return P.T7(C.CD.HG(a.clientLeft),C.CD.HG(a.clientTop),C.CD.HG(a.clientWidth),C.CD.HG(a.clientHeight),null)},
+gwl:function(a){return P.T7(C.CD.zQ(a.clientLeft),C.CD.zQ(a.clientTop),C.CD.zQ(a.clientWidth),C.CD.zQ(a.clientHeight),null)},
 X:function(a){return a.localName},
 gVY:function(a){return H.J(new W.Cq(a,"mousedown",!1),[null])},
 gf0:function(a){return H.J(new W.Cq(a,"mousemove",!1),[null])},
@@ -3470,7 +3501,7 @@ FB:{
 "%":"HTMLTextAreaElement"},
 a3:{
 "^":"Gv;",
-gwl:function(a){return H.J(new P.hL(C.CD.HG(a.clientX),C.CD.HG(a.clientY)),[null])},
+gwl:function(a){return H.J(new P.hL(C.CD.zQ(a.clientX),C.CD.zQ(a.clientY)),[null])},
 $isa:1,
 "%":"Touch"},
 y6:{
@@ -3478,7 +3509,7 @@ y6:{
 $isy6:1,
 $isa:1,
 "%":"TouchEvent"},
-o4:{
+ci:{
 "^":"x5;",
 gv:function(a){return a.length},
 p:function(a,b){if(b>>>0!==b||b>=a.length)throw H.b(P.Cf(b,a,null,null,null))
@@ -3616,7 +3647,7 @@ gk:function(){return this.c}}}],["","",,P,{
 "^":""}],["","",,P,{
 "^":"",
 Y0:{
-"^":"tp;",
+"^":"zU;",
 $isGv:1,
 "%":"SVGAElement"},
 ZJ:{
@@ -3695,12 +3726,12 @@ QN:{
 "^":"d5;",
 $isGv:1,
 "%":"SVGFilterElement"},
-tp:{
+zU:{
 "^":"d5;",
 $isGv:1,
 "%":"SVGCircleElement|SVGClipPathElement|SVGDefsElement|SVGEllipseElement|SVGForeignObjectElement|SVGGElement|SVGGeometryElement|SVGLineElement|SVGPathElement|SVGPolygonElement|SVGPolylineElement|SVGRectElement|SVGSwitchElement;SVGGraphicsElement"},
 rE:{
-"^":"tp;",
+"^":"zU;",
 $isGv:1,
 "%":"SVGImageElement"},
 uz:{
@@ -3729,7 +3760,7 @@ gf0:function(a){return H.J(new W.Cq(a,"mousemove",!1),[null])},
 $isGv:1,
 "%":"SVGAltGlyphDefElement|SVGAltGlyphItemElement|SVGComponentTransferFunctionElement|SVGDescElement|SVGDiscardElement|SVGFEDistantLightElement|SVGFEFuncAElement|SVGFEFuncBElement|SVGFEFuncGElement|SVGFEFuncRElement|SVGFEMergeNodeElement|SVGFEPointLightElement|SVGFESpotLightElement|SVGFontElement|SVGFontFaceElement|SVGFontFaceFormatElement|SVGFontFaceNameElement|SVGFontFaceSrcElement|SVGFontFaceUriElement|SVGGlyphElement|SVGHKernElement|SVGMetadataElement|SVGMissingGlyphElement|SVGStopElement|SVGTitleElement|SVGVKernElement;SVGElement"},
 hy:{
-"^":"tp;",
+"^":"zU;",
 $isGv:1,
 "%":"SVGSVGElement"},
 aS:{
@@ -3737,7 +3768,7 @@ aS:{
 $isGv:1,
 "%":"SVGSymbolElement"},
 qF:{
-"^":"tp;",
+"^":"zU;",
 "%":";SVGTextContentElement"},
 Rk:{
 "^":"qF;",
@@ -3747,7 +3778,7 @@ Eo:{
 "^":"qF;",
 "%":"SVGTSpanElement|SVGTextElement;SVGTextPositioningElement"},
 Zv:{
-"^":"tp;",
+"^":"zU;",
 $isGv:1,
 "%":"SVGUseElement"},
 GR:{
@@ -3889,7 +3920,7 @@ $aszM:function(){return[P.P]},
 $isqC:1},
 Ip:{
 "^":"fj+SU;"},
-zU:{
+Hg:{
 "^":"Dg;",
 $iszM:1,
 $aszM:function(){return[P.CP]},
@@ -3990,12 +4021,14 @@ return z}}],["","",,O,{
 "^":"",
 Q:[function(){O.N()},"$0","ao",0,0,1],
 T:{
-"^":"a;Q,a,b,c",
+"^":"a;Q,a,b,c,d,e,f,r,x,y",
 mH:[function(a,b){var z,y,x,w,v
+this.y=new P.iP(Date.now(),!1)
 z=window
 y=this.ght(this)
 C.ol.y4(z)
 C.ol.ne(z,W.VF(y))
+this.f=this.y.Q
 for(z=this.b,x=0;x<9;++x){y=z[x]
 y.slP(y.glP()+0.03)}z=z[0]
 z.slP(z.glP()+0.03)
@@ -4013,8 +4046,18 @@ v="#"+v.kN(v.Q)+v.kN(v.a)+v.kN(v.b)
 w.backgroundColor=v}z.e.setTransform(1,0,0,1,0,0)
 z.e.clearRect(0,0,z.Q,z.a)
 z.e.globalCompositeOperation="source-over"
-y.hG(z)},"$1","ght",2,0,14],
+y.hG(z)
+z=this.f
+y=this.e
+if(typeof z!=="number")return z.T()
+if(typeof y!=="number")return H.o(y)
+y=z-y
+this.r=y
+this.e=z
+this.x=1000/y
+document.querySelector("#text").textContent="Frames Per Second : "+C.jn.X(J.NQ(this.x))},"$1","ght",2,0,14],
 Zn:function(){var z,y,x,w,v,u,t,s,r
+document.getElementById("audio").setAttribute("voudlme","0.0")
 for(z=this.b,y=0;y<9;++y){x=""+y
 H.qw(x)
 w=$.WZ().p(0,"res/texture.png")
@@ -4028,7 +4071,6 @@ w=K.ac(u)
 t.q(0,"res/texture.png",w)}t=K.Oi(w,null)
 v.q(0,"res/texture.png",t)
 v=t}z[y]=K.DM(v,0,0)}document.getElementById("viewContainer").appendChild(this.Q.c)
-document.querySelector("#text").textContent="This Should change"
 v=this.c
 v.f=H.J(new P.hL(400,400),[null])
 v.Aj()
@@ -4049,7 +4091,9 @@ for(y=0;y<9;++y){s=z[y]
 r=new P.hL(0.5,0.5)
 r.$builtinTypeInfo=[null]
 s.sdU(r)
-t.push(z[y])}this.a.dy.push(v)
+t.push(z[y])}this.y=new P.iP(Date.now(),!1)
+this.a.dy.push(v)
+this.e=this.y.Q
 z=window
 v=this.ght(this)
 C.ol.y4(z)
@@ -4058,7 +4102,7 @@ static:{N:function(){var z,y,x,w,v,u,t,s,r,q,p,o
 z=new K.lB(null,800,800,!1,null,null)
 z.Y(800,800,null,!1,!1)
 z.e=J.L(z.c)
-y=C.U.bS("#f69")
+y=C.U.bS("#553333")
 if(C.U.nC(y,"#")){x=y.length
 if(x===4){if(1>=x)return H.e(y,1)
 w=y[1]
@@ -4100,7 +4144,7 @@ x=H.J(new P.hL(0,0),[null])
 p=H.J(new P.hL(1,1),[null])
 o=new K.ab(null)
 o.c0()
-o=new O.T(z,q,r,new K.IT([],!0,w,x,p,0,1,1,o,!0,!1,!0,new K.W(P.Z()),!1,!1,P.M(null,null,null,P.P),null))
+o=new O.T(z,q,r,new K.IT([],!0,w,x,p,0,1,1,o,!0,!1,!0,new K.W(P.Z()),!1,!1,P.M(null,null,null,P.P),null),0,null,null,null,null,null)
 o.Zn()
 return o}}}},1],["","",,K,{
 "^":"",
@@ -4543,6 +4587,7 @@ return J.ks(a)}
 J.F8=function(a,b,c,d){return J.R(a).v0(a,b,c,d)}
 J.L=function(a){return J.R(a).gZ(a)}
 J.Lz=function(a){return J.t(a).X(a)}
+J.NQ=function(a){return J.Wx(a).zQ(a)}
 J.Nj=function(a,b,c){return J.rY(a).Nj(a,b,c)}
 J.Nu=function(a,b,c,d){return J.R(a).Ci(a,b,c,d)}
 J.Nx=function(a){return J.w1(a).gu(a)}

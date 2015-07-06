@@ -71,9 +71,7 @@ class testApplication {
     timeDiff = thisFrame - lastFrame;
     lastFrame = thisFrame;
     fps = 1000/timeDiff;
-    querySelector("#text").text = "FPS : " + (fps).round().toString();
-
-
+    querySelector("#text").text = "Frames Per Second : " + (fps).round().toString();
   }
 
   void bind(){
