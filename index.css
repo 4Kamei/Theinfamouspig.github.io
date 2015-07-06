@@ -9,6 +9,9 @@ header {
     height: 200px;
     width: 100%;
 }
+#body{
+    background: #e6ff81;
+}
 #topImage{
     width: inherit;
     height: inherit;
@@ -32,12 +35,9 @@ h2 span {
      background: rgba(0, 0, 0, 0.7);
      padding: 10px;
  }
-.image{
-    position: absolute;
-    width: 100px;
-}
 
 #content {
+    position: relative;
     border: 2px solid black;
-    margin-top: inherit;
+    margin-top: 200px;
 }
