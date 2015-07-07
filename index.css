@@ -12,15 +12,41 @@ header {
 #body{
     background: #ffffff;
 }
+
 #topImage{
     width: inherit;
     height: inherit;
 }
-#image {
 
+.rectangle {
+    width: inherit;
+    height: 50px;
+    background-color: white;
+    border-top: 5px solid #335533;
+    border-bottom: 5px solid #335533;
+}
+#triangleRight {
+    width: 0;
+    height: 0;
+    border-top: 100px solid red;
+    border-left: 100px solid transparent;
+}
+#triangleLeft {
+    width: 0;
+    height: 0;
+    border-top: 100px solid red;
+    border-right: 100px solid transparent;
+
+}
+
+
+#imageBar{
+    width: inherit;
+    height: inherit;
     position: absolute;
-    height: 110%;
-    width: inherit; /* for IE 6 */
+    top: 130px;
+}
+#image {
 }
 h2 {
     color: white;
@@ -37,5 +63,5 @@ h2 {
     width: 90%;
     padding: 10px;
     margin-top: 200px;
-    border: 1px solid #ccddcc;
+    border: 3px solid #ccddcc;
 }
