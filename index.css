@@ -3,41 +3,39 @@ body {
 }
 
 header {
-    border: 1px dotted blue;
+    z-index: 1;
     position: fixed;
     top: 0;
     height: 200px;
     width: 100%;
 }
 #body{
-    background: #e6ff81;
+    background: #ffffff;
 }
 #topImage{
     width: inherit;
     height: inherit;
 }
 #image {
+
     position: absolute;
     height: 110%;
     width: inherit; /* for IE 6 */
 }
 h2 {
+    color: white;
     position: absolute;
     top: 0px;
-    left: 0;
+    left: 10px;
     width: 100%;
 }
-h2 span {
-     color: white;
-     font: bold 24px/45px Helvetica, Sans-Serif;
-     letter-spacing: -1px;
-     background: rgb(0, 0, 0); /* fallback color */
-     background: rgba(0, 0, 0, 0.7);
-     padding: 10px;
- }
 
 #content {
+    background-color: #ddeedd;
     position: relative;
-    border: 2px solid black;
+    margin: auto;
+    width: 90%;
+    padding: 10px;
     margin-top: 200px;
+    border: 1px solid #ccddcc;
 }
