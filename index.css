@@ -9,6 +9,13 @@ header {
     height: 200px;
     width: 100%;
 }
+header, nav {
+     text-align: center;
+     background: white;
+     margin: 0 0;
+     padding: 10px;
+}
+
 #body{
     background: #ffffff;
 }
@@ -25,28 +32,25 @@ header {
     border-top: 5px solid #335533;
     border-bottom: 5px solid #335533;
 }
-#triangleRight {
-    width: 0;
-    height: 0;
-    border-top: 100px solid red;
-    border-left: 100px solid transparent;
+.button {
+    text-align: center;
+    padding:5px;
+    border-bottom: 6px solid #fff;
+    color:#000;
+    text-decoration:none;
+    margin: auto;
+    width: 10%;
+    padding: 10px;
 }
-#triangleLeft {
-    width: 0;
-    height: 0;
-    border-top: 100px solid red;
-    border-right: 100px solid transparent;
-
-}
-
-
-#imageBar{
-    width: inherit;
-    height: inherit;
-    position: absolute;
-    top: 130px;
-}
-#image {
+.button:hover{
+    text-align: center;
+    padding:5px;
+    border-bottom: 6px solid #585;
+    color:#000;
+    text-decoration:none;
+    margin: auto;
+    width: 10%;
+    padding: 10px;
 }
 h2 {
     color: white;
