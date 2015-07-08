@@ -15,7 +15,10 @@ header, nav {
      margin: 0 0;
      padding: 10px;
 }
-
+#title{
+    z-index: 2;
+    text-decoration-color: black;
+}
 #body{
     background: #ffffff;
 }
@@ -34,23 +37,21 @@ header, nav {
 }
 .button {
     text-align: center;
-    padding:5px;
     border-bottom: 6px solid #fff;
     color:#000;
     text-decoration:none;
     margin: auto;
     width: 10%;
-    padding: 10px;
+    padding: 20px;
 }
 .button:hover{
     text-align: center;
-    padding:5px;
     border-bottom: 6px solid #585;
     color:#000;
     text-decoration:none;
     margin: auto;
     width: 10%;
-    padding: 10px;
+    padding: 20px;
 }
 h2 {
     color: white;
