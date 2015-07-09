@@ -1,6 +1,7 @@
 body {
     margin: 0 0 0 0;
     overflow: hidden;
+    background-color: #ddeedd;
 }
 header {
     font-family: 'Open Sans', sans-serif;
@@ -22,10 +23,6 @@ header, nav {
     z-index: 2;
     text-decoration-color: black;
 }
-#body{
-    background: #ffffff;
-}
-
 #topImage{
     width: inherit;
     height: inherit;
@@ -87,11 +84,11 @@ h2 {
 }
 
 .content {
-    background-color: #ddeedd;
+    background-color: #ffffff;
     position: relative;
     margin: auto;
     width: 90%;
     padding: 10px;
     margin-top: 80px;
-    border: 3px solid #ccddcc;
+    border: 2px solid #447744;
 }
