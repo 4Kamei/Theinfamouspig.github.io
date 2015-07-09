@@ -74,10 +74,11 @@ header, nav {
 span + span{
     margin-left: 30px;
 }
+
 h2 {
     color: white;
     position: absolute;
-    top: 0px;
+    top: 0;
     left: 10px;
     width: 100%;
 }

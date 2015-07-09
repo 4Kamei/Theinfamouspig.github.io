@@ -4057,7 +4057,6 @@ this.e=z
 this.x=1000/y
 document.querySelector("#text").textContent="Frames Per Second : "+C.jn.X(J.NQ(this.x))},"$1","ght",2,0,14],
 Zn:function(){var z,y,x,w,v,u,t,s,r
-document.getElementById("audio").setAttribute("voudlme","0.0")
 for(z=this.b,y=0;y<9;++y){x=""+y
 H.qw(x)
 w=$.WZ().p(0,"res/texture.png")

@@ -17,8 +17,6 @@ class testApplication {
 
   testApplication(){
 
-    document.getElementById("audio").setAttribute("voudlme", "0.0");
-
     for(int j = 0; j < 9; j++){
       print(j);
       tex[j] = new Sprite.fromImage('res/texture.png');

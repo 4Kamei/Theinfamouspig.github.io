@@ -5,5 +5,6 @@ dependencies:
   browser: any
   vector_math: any
   pixi: any
+  jquery: any
 dev_dependencies:
 #  unittest: any
