@@ -4,9 +4,10 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/web/dart/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/web/dart/res/packages" />
       <excludeFolder url="file://$MODULE_DIR$/web/packages" />
       <excludeFolder url="file://$MODULE_DIR$/web/pageRes/packages" />
-      <excludeFolder url="file://$MODULE_DIR$/web/res/packages" />
+      <excludeFolder url="file://$MODULE_DIR$/web/pageRes/res/packages" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
