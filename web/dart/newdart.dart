@@ -1,5 +1,5 @@
 import 'dart:html';
-import 'package:pixi/pixi.dart';
+import '../../packages/pixi/pixi.dart';
 
 class testApplication {
 
