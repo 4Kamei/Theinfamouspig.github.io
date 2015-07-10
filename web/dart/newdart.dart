@@ -24,8 +24,8 @@ class testApplication {
       "over"		: new Texture.fromImage("res/buttonOver.png")
     };
 
-    int width = window.screen.width;
-    int height = window.screen.height;
+    int width = window.innerWidth-100;
+    int height = window.innerHeight-100;
 
     print(height);
     if(height < width){

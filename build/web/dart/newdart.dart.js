@@ -4027,26 +4027,33 @@ Q:[function(){O.N()},"$0","ao",0,0,1],
 dw:{
 "^":"a;Q,a,b,c,d,e,f,r,x,y",
 Su:[function(a){var z,y,x,w,v,u
-z=C.CD.zQ(document.getElementById("viewContainer").clientWidth)
-y=C.CD.zQ(document.getElementById("viewContainer").clientWidth)
-this.Q.lO(z,y)
-x=this.c
-x.f=H.J(new P.V(z/2,y/2),[null])
-x.Aj()
-x=this.b
-J.eC(x[0],H.J(new P.V(0,0),[null]))
-w=-z/4
-J.eC(x[1],H.J(new P.V(w,w),[null]))
-v=-1.4142*z/4
-J.eC(x[2],H.J(new P.V(v,0),[null]))
-u=z/4
-J.eC(x[3],H.J(new P.V(w,u),[null]))
-J.eC(x[4],H.J(new P.V(0,v),[null]))
-v=1.4142*z/4
-J.eC(x[5],H.J(new P.V(0,v),[null]))
-J.eC(x[6],H.J(new P.V(u,w),[null]))
-J.eC(x[7],H.J(new P.V(v,0),[null]))
-J.eC(x[8],H.J(new P.V(u,u),[null]))},"$1","ga7",2,0,16],
+z=window.innerWidth
+if(typeof z!=="number")return z.T()
+y=z-100
+z=window.innerHeight
+if(typeof z!=="number")return z.T()
+x=z-100
+P.JS(x)
+if(x<y)y=x
+else x=y
+this.Q.lO(y,x)
+z=this.c
+z.f=H.J(new P.V(y/2,x/2),[null])
+z.Aj()
+z=this.b
+J.eC(z[0],H.J(new P.V(0,0),[null]))
+w=-y/4
+J.eC(z[1],H.J(new P.V(w,w),[null]))
+v=-1.4142*y/4
+J.eC(z[2],H.J(new P.V(v,0),[null]))
+u=y/4
+J.eC(z[3],H.J(new P.V(w,u),[null]))
+J.eC(z[4],H.J(new P.V(0,v),[null]))
+v=1.4142*y/4
+J.eC(z[5],H.J(new P.V(0,v),[null]))
+J.eC(z[6],H.J(new P.V(u,w),[null]))
+J.eC(z[7],H.J(new P.V(v,0),[null]))
+J.eC(z[8],H.J(new P.V(u,u),[null]))},"$1","ga7",2,0,16],
 mH:[function(a,b){var z,y,x
 this.y=new P.iP(Date.now(),!1)
 z=window
@@ -4072,13 +4079,20 @@ this.x=1000/y
 document.querySelector("#text").textContent=C.jn.X(J.NQ(this.x))},"$1","ght",2,0,17],
 Zn:function(){var z,y,x,w,v,u,t,s,r,q,p,o,n,m
 z=P.Td(["button",K.Eo("res/button.png",!1),"down",K.Eo("res/buttonDown.png",!1),"over",K.Eo("res/buttonOver.png",!1)])
-y=C.CD.zQ(document.getElementById("viewContainer").clientWidth)
-x=C.CD.zQ(document.getElementById("viewContainer").clientWidth)
-w=-y/4
-v=-1.4142*y/4
-u=y/4
-t=1.4142*y/4
-P.Td([0,H.J(new P.V(0,0),[null]),1,H.J(new P.V(w,w),[null]),2,H.J(new P.V(v,0),[null]),3,H.J(new P.V(w,u),[null]),4,H.J(new P.V(0,v),[null]),5,H.J(new P.V(0,t),[null]),6,H.J(new P.V(u,w),[null]),7,H.J(new P.V(t,0),[null]),8,H.J(new P.V(u,u),[null])])
+y=window.innerWidth
+if(typeof y!=="number")return y.T()
+x=y-100
+y=window.innerHeight
+if(typeof y!=="number")return y.T()
+w=y-100
+P.JS(w)
+if(w<x)x=w
+else w=x
+y=-x/4
+v=-1.4142*x/4
+u=x/4
+t=1.4142*x/4
+P.Td([0,H.J(new P.V(0,0),[null]),1,H.J(new P.V(y,y),[null]),2,H.J(new P.V(v,0),[null]),3,H.J(new P.V(y,u),[null]),4,H.J(new P.V(0,v),[null]),5,H.J(new P.V(0,t),[null]),6,H.J(new P.V(u,y),[null]),7,H.J(new P.V(t,0),[null]),8,H.J(new P.V(u,u),[null])])
 for(s=this.b,r=0;r<9;++r){q=K.DM(z.p(0,"button"),0,0)
 s[r]=q
 p=new P.V(0.5,0.5)
@@ -4087,37 +4101,37 @@ q.dy=p
 J.Vg(s[r]).yI(new O.Eu(this,r))}J.Sr(this.a.Q.p(0,"mouseUp")).yI(new O.Pl(this,z))
 J.Sr(this.a.Q.p(0,"touchEnd")).yI(new O.YT(this,z))
 q=this.Q
-q.lO(y,x)
+q.lO(x,w)
 p=this.c
-p.f=H.J(new P.V(y/2,x/2),[null])
+p.f=H.J(new P.V(x/2,w/2),[null])
 p.Aj()
 for(o=p.dy,r=0;r<9;++r){n=s[r]
 m=new P.V(0.5,0.5)
 m.$builtinTypeInfo=[null]
 n.sdU(m)
 o.push(s[r])}J.eC(s[0],H.J(new P.V(0,0),[null]))
-J.eC(s[1],H.J(new P.V(w,w),[null]))
+J.eC(s[1],H.J(new P.V(y,y),[null]))
 J.eC(s[2],H.J(new P.V(v,0),[null]))
-J.eC(s[3],H.J(new P.V(w,u),[null]))
+J.eC(s[3],H.J(new P.V(y,u),[null]))
 J.eC(s[4],H.J(new P.V(0,v),[null]))
 J.eC(s[5],H.J(new P.V(0,t),[null]))
-J.eC(s[6],H.J(new P.V(u,w),[null]))
+J.eC(s[6],H.J(new P.V(u,y),[null]))
 J.eC(s[7],H.J(new P.V(t,0),[null]))
 J.eC(s[8],H.J(new P.V(u,u),[null]))
-for(r=0;r<9;++r){w=s[r]
+for(r=0;r<9;++r){y=s[r]
 v=new P.V(0.5,0.5)
 v.$builtinTypeInfo=[null]
-w.sdU(v)
+y.sdU(v)
 o.push(s[r])}this.y=new P.iP(Date.now(),!1)
 this.a.dy.push(p)
 this.e=this.y.Q
 document.getElementById("viewContainer").appendChild(q.c)
-w=H.J(new W.RO(window,"resize",!1),[null])
-H.J(new W.xC(0,w.Q,w.a,W.Y(this.ga7()),w.b),[H.Z(w,0)]).Z()
-w=window
+y=H.J(new W.RO(window,"resize",!1),[null])
+H.J(new W.xC(0,y.Q,y.a,W.Y(this.ga7()),y.b),[H.Z(y,0)]).Z()
+y=window
 v=this.ght(this)
-C.ol.y4(w)
-C.ol.ne(w,W.Y(v))},
+C.ol.y4(y)
+C.ol.ne(y,W.Y(v))},
 static:{N:function(){var z,y,x,w,v,u,t,s,r,q,p,o,n
 z=new K.X(null,!1,H.J(new P.V(400,-300),[null]),H.J(new P.V(0,0),[null]),null,null,null,800,800,!1,null,null)
 z.Y(800,800,null,!1,!0)
