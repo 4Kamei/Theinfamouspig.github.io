@@ -5,7 +5,7 @@ import 'dart:math' as Math;
 class testApplication {
 
   var renderer = new WebGLRenderer(width: 800, height: 800, interactive:true);
-  var stage = new Stage(new Colour.fromHtml('#553333'));
+  var stage = new Stage(new Colour.fromHtml('#f0f0f0'));
   var tex = new List(9);
   var holder = new DisplayObjectContainer();
   int i = 0;

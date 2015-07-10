@@ -4139,7 +4139,7 @@ z.z=x
 x=new K.Ky(null,null,P.u5())
 x.PZ(y)
 z.ch=x
-w=C.xB.bS("#553333")
+w=C.xB.bS("#f0f0f0")
 if(C.xB.nC(w,"#")){x=w.length
 if(x===4){if(1>=x)return H.e(w,1)
 v=w[1]

@@ -1,7 +1,7 @@
 body {
     margin: 0 0 0 0;
-    overflow: hidden;
-    background-color: #ddeedd;
+    overflow: auto;
+    background: #f0f0f0;
 }
 header {
     font-family: 'Open Sans', sans-serif;
@@ -13,13 +13,15 @@ header {
 }
 header, nav {
      text-align: center;
-     background: white;
+     background: inherit;
      margin: 0 0;
 }
 span + span{
     margin-left: 40px;
 }
-
+a {
+    color: cornflowerblue;
+}
 h2 {
     color: white;
     position: absolute;
@@ -31,7 +33,6 @@ h3 {
     text-align: center;
     font-size: 24px;
     background-color: #ffffff;
-    border: 2px solid #447744;
 }
 #spacer{
     padding-top: 15px;
@@ -57,15 +58,15 @@ h3 {
 .rectangle {
     width: inherit;
     height: 59px;
-    background-color: white;
-    border-top: 5px solid #335533;
-    border-bottom: 1px solid #335533;
+    background-color: #17050A;
+    border-bottom: 10px solid #480720;
 }
 
 .button {
+
     text-align: center;
-    border-bottom: 6px solid #fff;
-    color:#000;
+    border-bottom: 0;
+    color:#fff;
     text-decoration:none;
     margin: auto;
     height: 10%;
@@ -74,8 +75,8 @@ h3 {
 }
 .button:hover{
     text-align: center;
-    border-bottom: 6px solid #585;
-    color:#000;
+    border-bottom: 6px solid #68072F;
+    color:#fff;
     text-decoration:none;
     margin: auto;
     width: 10%;
@@ -83,8 +84,8 @@ h3 {
 }
 .buttonClicked {
      text-align: center;
-     border-bottom: 6px solid #585;
-     color:#000;
+     border-bottom: 6px solid #68072F;
+     color:#fff;
      text-decoration:none;
      margin: auto;
      width: 10%;
@@ -92,19 +93,18 @@ h3 {
  }
 .buttonClicked:hover{
     text-align: center;
-    border-bottom: 6px solid #474;
-    color:#000;
+    border-bottom: 6px solid #89073E;
+    color:#fff;
     text-decoration:none;
     margin: auto;
     width: 10%;
     padding: 0 20px 10px 20px;
 }
 .content {
-    background-color: #ffffff;
+    background-color: inherit;
     position: relative;
     margin: auto;
     width: 90%;
     padding: 10px;
     margin-top: 80px;
-    border: 2px solid #447744;
 }
