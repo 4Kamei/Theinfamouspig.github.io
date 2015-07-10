@@ -24,8 +24,15 @@ class testApplication {
       "over"		: new Texture.fromImage("res/buttonOver.png")
     };
 
-    int width = document.getElementById("viewContainer").clientWidth;
-    int height = document.getElementById("viewContainer").clientWidth;
+    int width = window.screen.width;
+    int height = window.screen.height;
+
+    print(height);
+    if(height < width){
+      width = height;
+    }else{
+      height = width;
+    }
     double sqrt2 = 1.4142;
 
     var positions = {
@@ -105,8 +112,14 @@ class testApplication {
   }
 
   void resize(Event e){
-    int width = document.getElementById("viewContainer").clientWidth;
-    int height = document.getElementById("viewContainer").clientWidth;
+    int width = window.innerWidth-100;
+    int height = window.innerHeight-100;
+    print(height);
+    if(height < width){
+      width = height;
+    }else{
+      height = width;
+    }
     double sqrt2 = 1.4142;
 
     renderer.resize(width, height);
