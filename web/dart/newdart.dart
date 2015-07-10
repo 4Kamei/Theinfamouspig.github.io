@@ -26,7 +26,6 @@ class testApplication {
 
     int width = window.innerWidth-100;
     int height = window.innerHeight-100;
-
     print(height);
     if(height < width){
       width = height;
