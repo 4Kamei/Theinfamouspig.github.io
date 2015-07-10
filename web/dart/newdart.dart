@@ -1,9 +1,10 @@
 import 'dart:html';
 import '../../packages/pixi/pixi.dart';
+import 'dart:math' as Math;
 
 class testApplication {
 
-  var renderer = new CanvasRenderer(width: 800, height: 800);
+  var renderer = new WebGLRenderer(width: 800, height: 800, interactive:true);
   var stage = new Stage(new Colour.fromHtml('#553333'));
   var tex = new List(9);
   var holder = new DisplayObjectContainer();
@@ -17,64 +18,139 @@ class testApplication {
 
   testApplication(){
 
+    var textures = {
+      "button"	: new Texture.fromImage("res/button.png"),
+      "down"		: new Texture.fromImage("res/buttonDown.png"),
+      "over"		: new Texture.fromImage("res/buttonOver.png")
+    };
+
+    int width = document.getElementById("viewContainer").clientWidth;
+    int height = document.getElementById("viewContainer").clientWidth;
+    double sqrt2 = 1.4142;
+
+    var positions = {
+      0         : new Point(0,0),
+      1 : new Point(-width/4,-width/4),
+      2 : new Point(-sqrt2*width/4,0),
+      3 : new Point(-width/4,width/4),
+      4 : new Point(0,-sqrt2*width/4),
+      5 : new Point(0,sqrt2*width/4),
+      6 : new Point(width/4,-width/4),
+      7 : new Point(sqrt2*width/4,0),
+      8 : new Point(width/4,width/4)
+    };
+
+
+
     for(int j = 0; j < 9; j++){
-      print(j);
-      tex[j] = new Sprite.fromImage('res/texture.png');
+
+      tex[j] = new Sprite(textures["button"]);
+      tex[j].anchor = new Point(0.5,0.5);
+
+      tex[j].onClick.listen((e) => tex[j].scale *= -1);
+
+
     }
 
+    this.stage.onMouseUp.listen((e) {
+      for (var b in this.holder) b.setTexture(b.isOver ? textures["over"] : textures["button"]);
+    });
 
-    document.getElementById("viewContainer").append(this.renderer.view);
+    this.stage.onTouchEnd.listen((e) {
+      for (var b in this.holder) b.setTexture(textures["button"]);
+    });
 
-    holder.position = new Point(400,400);
+    querySelector("#text").text = (height).round().toString();
+    renderer.resize(width, height);
 
+    holder.position = new Point(width/2,height/2);
     for(int j = 0; j < 9; j++){
       tex[j].anchor = new Point(0.5,0.5);
       holder.children.add(tex[j]);
     }
 
+
     tex[0].position = new Point(0,0);
-    tex[1].position = new Point(-200,-200);
-    tex[2].position = new Point(-282,0);
-    tex[3].position = new Point(-200,200);
-    tex[4].position = new Point(0,-282);
-    tex[5].position = new Point(0,282);
-    tex[6].position = new Point(200,-200);
-    tex[7].position = new Point(282,0);
-    tex[8].position = new Point(200,200);
+    tex[1].position = new Point(-width/4,-width/4);
+    tex[2].position = new Point(-sqrt2*width/4,0);
+    tex[3].position = new Point(-width/4,width/4);
+    tex[4].position = new Point(0,-sqrt2*width/4);
+    tex[5].position = new Point(0,sqrt2*width/4);
+    tex[6].position = new Point(width/4,-width/4);
+    tex[7].position = new Point(sqrt2*width/4,0);
+    tex[8].position = new Point(width/4,width/4);
 
     for(int j = 0; j < 9; j++) {
       tex[j].anchor = new Point(0.5, 0.5);
       holder.children.add(tex[j]);
     }
 
+
     dateTime = new DateTime.now();
     stage.children.add(holder);
+
+
+
     lastFrame = dateTime.millisecondsSinceEpoch;
+
+
+    document.getElementById("viewContainer").append(this.renderer.view);
+
+    window.onResize.listen(resize);
+
     window.requestAnimationFrame(this._animate);
+  }
+
+  void flip(InteractionEvent event){
+    querySelector("#text").text = "Yay?";
+  }
+
+  void resize(Event e){
+    print("Piece of shit cunt nigger fag");
+    int width = document.getElementById("viewContainer").clientWidth;
+    int height = document.getElementById("viewContainer").clientWidth;
+    double sqrt2 = 1.4142;
+
+    renderer.resize(width, height);
+
+    holder.position = new Point(width/2,height/2);
+
+    tex[0].position = new Point(0,0);
+    tex[1].position = new Point(-width/4,-width/4);
+    tex[2].position = new Point(-sqrt2*width/4,0);
+    tex[3].position = new Point(-width/4,width/4);
+    tex[4].position = new Point(0,-sqrt2*width/4);
+    tex[5].position = new Point(0,sqrt2*width/4);
+    tex[6].position = new Point(width/4,-width/4);
+    tex[7].position = new Point(sqrt2*width/4,0);
+    tex[8].position = new Point(width/4,width/4);
+    querySelector("#text").text  = stage.onClick.toString();
+
   }
 
   void _animate(var num)
   {
     dateTime = new DateTime.now();
     window.requestAnimationFrame(this._animate);
-
     thisFrame = dateTime.millisecondsSinceEpoch;
     for(int j = 0; j < 9; j++){
       tex[j].rotation += 0.03;
     }
-      tex[0].rotation += 0.03;
+    tex[0].rotation += 0.03;
 
     holder.rotation -= 0.03;
     this.renderer.render(this.stage);
     timeDiff = thisFrame - lastFrame;
     lastFrame = thisFrame;
     fps = 1000/timeDiff;
-    querySelector("#text").text = (fps).round().toString();
+    //querySelector("#text").text = (fps).round().toString();
   }
 
   void bind(){
 
   }
+
+
 }
 
 

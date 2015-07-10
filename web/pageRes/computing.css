@@ -1,32 +1,14 @@
-.slideIn{
-    animation-name: slideDown;
-    -webkit-animation-name: slideDown;
-
-    animation-duration: 1s;
-    -webkit-animation-duration: 1s;
-
-    animation-timing-function: ease;
-    -webkit-animation-timing-function: ease;
-
-    visibility: visible !important;
-}
-
-@keyframes slideIn {
-    0% {
-        transform: translateX(-100%);
-    }
-    100% {
-        transform: translateX(0%);
-    }
-}
-
 #compNavRect{
+    font-size: 14px;
     width: inherit;
     height: 50px;
     background-color: white;
-    border-bottom: 1px solid #335533;
+    border-bottom: 1px solid #353;
 }
 #spacer2{
+    padding-top: 10px;
+}
+#spacer3{
     padding-top: 10px;
 }
 .buttonSmall{

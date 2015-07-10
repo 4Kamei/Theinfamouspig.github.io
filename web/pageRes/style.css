@@ -70,7 +70,7 @@ h3 {
     margin: auto;
     height: 10%;
     width: 10%;
-    padding: 0 20px 5px 20px;
+    padding: 0 20px 10px 20px;
 }
 .button:hover{
     text-align: center;
@@ -79,7 +79,7 @@ h3 {
     text-decoration:none;
     margin: auto;
     width: 10%;
-    padding: 0 20px 5px 20px;
+    padding: 0 20px 10px 20px;
 }
 .buttonClicked {
      text-align: center;
@@ -88,7 +88,7 @@ h3 {
      text-decoration:none;
      margin: auto;
      width: 10%;
-    padding: 0 20px 5px 20px;
+    padding: 0 20px 10px 20px;
  }
 .buttonClicked:hover{
     text-align: center;
@@ -97,7 +97,7 @@ h3 {
     text-decoration:none;
     margin: auto;
     width: 10%;
-    padding: 0 20px 5px 20px;
+    padding: 0 20px 10px 20px;
 }
 .content {
     background-color: #ffffff;
