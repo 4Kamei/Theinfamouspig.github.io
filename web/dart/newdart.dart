@@ -60,7 +60,6 @@ class testApplication {
       for (var b in this.holder) b.setTexture(textures["button"]);
     });
 
-    querySelector("#text").text = (height).round().toString();
     renderer.resize(width, height);
 
     holder.position = new Point(width/2,height/2);
@@ -106,7 +105,6 @@ class testApplication {
   }
 
   void resize(Event e){
-    print("Piece of shit cunt nigger fag");
     int width = document.getElementById("viewContainer").clientWidth;
     int height = document.getElementById("viewContainer").clientWidth;
     double sqrt2 = 1.4142;
@@ -124,7 +122,7 @@ class testApplication {
     tex[6].position = new Point(width/4,-width/4);
     tex[7].position = new Point(sqrt2*width/4,0);
     tex[8].position = new Point(width/4,width/4);
-    querySelector("#text").text  = stage.onClick.toString();
+
 
   }
 
@@ -143,7 +141,7 @@ class testApplication {
     timeDiff = thisFrame - lastFrame;
     lastFrame = thisFrame;
     fps = 1000/timeDiff;
-    //querySelector("#text").text = (fps).round().toString();
+    querySelector("#text").text = (fps).round().toString();
   }
 
   void bind(){

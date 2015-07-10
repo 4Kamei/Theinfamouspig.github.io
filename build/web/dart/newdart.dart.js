@@ -4027,7 +4027,6 @@ Q:[function(){O.N()},"$0","ao",0,0,1],
 dw:{
 "^":"a;Q,a,b,c,d,e,f,r,x,y",
 Su:[function(a){var z,y,x,w,v,u
-P.JS("Piece of shit cunt nigger fag")
 z=C.CD.zQ(document.getElementById("viewContainer").clientWidth)
 y=C.CD.zQ(document.getElementById("viewContainer").clientWidth)
 this.Q.lO(z,y)
@@ -4047,8 +4046,7 @@ v=1.4142*z/4
 J.eC(x[5],H.J(new P.V(0,v),[null]))
 J.eC(x[6],H.J(new P.V(u,w),[null]))
 J.eC(x[7],H.J(new P.V(v,0),[null]))
-J.eC(x[8],H.J(new P.V(u,u),[null]))
-document.querySelector("#text").textContent=J.Lz(J.Sr(this.a.Q.p(0,"click")))},"$1","ga7",2,0,16],
+J.eC(x[8],H.J(new P.V(u,u),[null]))},"$1","ga7",2,0,16],
 mH:[function(a,b){var z,y,x
 this.y=new P.iP(Date.now(),!1)
 z=window
@@ -4070,7 +4068,8 @@ if(typeof y!=="number")return H.o(y)
 y=z-y
 this.r=y
 this.e=z
-this.x=1000/y},"$1","ght",2,0,17],
+this.x=1000/y
+document.querySelector("#text").textContent=C.jn.X(J.NQ(this.x))},"$1","ght",2,0,17],
 Zn:function(){var z,y,x,w,v,u,t,s,r,q,p,o,n,m
 z=P.Td(["button",K.Eo("res/button.png",!1),"down",K.Eo("res/buttonDown.png",!1),"over",K.Eo("res/buttonOver.png",!1)])
 y=C.CD.zQ(document.getElementById("viewContainer").clientWidth)
@@ -4087,7 +4086,6 @@ p.$builtinTypeInfo=[null]
 q.dy=p
 J.Vg(s[r]).yI(new O.Eu(this,r))}J.Sr(this.a.Q.p(0,"mouseUp")).yI(new O.Pl(this,z))
 J.Sr(this.a.Q.p(0,"touchEnd")).yI(new O.YT(this,z))
-document.querySelector("#text").textContent=C.jn.X(C.jn.zQ(x))
 q=this.Q
 q.lO(y,x)
 p=this.c
@@ -4968,6 +4966,7 @@ J.Kr=function(a){return J.R(a).e6(a)}
 J.L=function(a,b,c,d,e){return J.R(a).nA(a,b,c,d,e)}
 J.LF=function(a,b,c){return J.R(a).IW(a,b,c)}
 J.Lz=function(a){return J.t(a).X(a)}
+J.NQ=function(a){return J.Wx(a).zQ(a)}
 J.Nj=function(a,b,c){return J.rY(a).Nj(a,b,c)}
 J.Nu=function(a,b,c,d){return J.R(a).Ci(a,b,c,d)}
 J.Nx=function(a){return J.w1(a).gu(a)}
