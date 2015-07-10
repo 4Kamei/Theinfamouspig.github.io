@@ -29,7 +29,9 @@ h2 {
 }
 h3 {
     text-align: center;
-    text-blink: 1;
+
+    background-color: #ffffff;
+    border: 2px solid #447744;
 }
 #spacer{
     padding-top: 15px;
@@ -48,7 +50,6 @@ h3 {
     padding: 10px;
     text-align: center;
     margin-top: 80px;
-    background: #ffffff;
 }
 .contentSpacer{
     margin-bottom: -80px;

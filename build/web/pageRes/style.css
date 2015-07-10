@@ -11,9 +11,6 @@ header {
     height: 65px;
     width: 100%;
 }
-h3{
-
-}
 header, nav {
      text-align: center;
      background: white;
@@ -22,6 +19,7 @@ header, nav {
 span + span{
     margin-left: 40px;
 }
+
 h2 {
     color: white;
     position: absolute;
@@ -29,7 +27,12 @@ h2 {
     left: 10px;
     width: 100%;
 }
+h3 {
+    text-align: center;
 
+    background-color: #ffffff;
+    border: 2px solid #447744;
+}
 #spacer{
     padding-top: 15px;
 }
@@ -41,11 +44,15 @@ h2 {
     width: inherit;
     height: inherit;
 }
-.center {
+#title{
     margin: auto;
-    width: 60%;
-    border:3px solid #8AC007;
+    width: 20%;
     padding: 10px;
+    text-align: center;
+    margin-top: 80px;
+}
+.contentSpacer{
+    margin-bottom: -80px;
 }
 .rectangle {
     width: inherit;
