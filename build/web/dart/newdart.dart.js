@@ -3216,13 +3216,14 @@ for(;z.D();)a=a+c+H.d(z.gk())}return a}}},
 wv:{
 "^":"a;"}}],["","",,W,{
 "^":"",
+wl:function(){return document},
 VC:function(a,b){a=536870911&a+b
 a=536870911&a+((524287&a)<<10>>>0)
 return a^a>>>6},
 xk:function(a){a=536870911&a+((67108863&a)<<3>>>0)
 a^=a>>>11
 return 536870911&a+((16383&a)<<15>>>0)},
-Y:function(a){var z=$.X3
+W:function(a){var z=$.X3
 if(z===C.NU)return a
 return z.oj(a,!0)},
 qE:{
@@ -3564,7 +3565,7 @@ $isGv:1,
 "%":"HTMLFrameSetElement"},
 RO:{
 "^":"qh;Q,a,b",
-X5:function(a,b,c,d){var z=new W.xC(0,this.Q,this.a,W.Y(a),this.b)
+X5:function(a,b,c,d){var z=new W.xC(0,this.Q,this.a,W.W(a),this.b)
 z.$builtinTypeInfo=this.$builtinTypeInfo
 z.Z()
 return z},
@@ -4027,39 +4028,32 @@ Q:[function(){O.N()},"$0","ao",0,0,1],
 dw:{
 "^":"a;Q,a,b,c,d,e,f,r,x,y",
 Su:[function(a){var z,y,x,w,v,u
-z=window.innerWidth
-if(typeof z!=="number")return z.T()
-y=z-100
-z=window.innerHeight
-if(typeof z!=="number")return z.T()
-x=z-100
-P.JS(x)
-if(x<y)y=x
-else x=y
-this.Q.lO(y,x)
-z=this.c
-z.f=H.J(new P.V(y/2,x/2),[null])
-z.Aj()
-z=this.b
-J.eC(z[0],H.J(new P.V(0,0),[null]))
-w=-y/4
-J.eC(z[1],H.J(new P.V(w,w),[null]))
-v=-1.4142*y/4
-J.eC(z[2],H.J(new P.V(v,0),[null]))
-u=y/4
-J.eC(z[3],H.J(new P.V(w,u),[null]))
-J.eC(z[4],H.J(new P.V(0,v),[null]))
-v=1.4142*y/4
-J.eC(z[5],H.J(new P.V(0,v),[null]))
-J.eC(z[6],H.J(new P.V(u,w),[null]))
-J.eC(z[7],H.J(new P.V(v,0),[null]))
-J.eC(z[8],H.J(new P.V(u,u),[null]))},"$1","ga7",2,0,16],
+z=C.CD.zQ(document.getElementById("canvas").clientWidth)
+y=C.CD.zQ(document.getElementById("canvas").clientHeight)
+this.Q.lO(z,y)
+x=this.c
+x.f=H.J(new P.V(z/2,y/2),[null])
+x.Aj()
+x=this.b
+J.eC(x[0],H.J(new P.V(0,0),[null]))
+w=-z/4
+J.eC(x[1],H.J(new P.V(w,w),[null]))
+v=-1.4142*z/4
+J.eC(x[2],H.J(new P.V(v,0),[null]))
+u=z/4
+J.eC(x[3],H.J(new P.V(w,u),[null]))
+J.eC(x[4],H.J(new P.V(0,v),[null]))
+v=1.4142*z/4
+J.eC(x[5],H.J(new P.V(0,v),[null]))
+J.eC(x[6],H.J(new P.V(u,w),[null]))
+J.eC(x[7],H.J(new P.V(v,0),[null]))
+J.eC(x[8],H.J(new P.V(u,u),[null]))},"$1","ga7",2,0,16],
 mH:[function(a,b){var z,y,x
 this.y=new P.iP(Date.now(),!1)
 z=window
 y=this.ght(this)
 C.ol.y4(z)
-C.ol.ne(z,W.Y(y))
+C.ol.ne(z,W.W(y))
 this.f=this.y.Q
 for(z=this.b,x=0;x<9;++x){y=z[x]
 y.slP(y.glP()+0.03)}z=z[0]
@@ -4075,115 +4069,108 @@ if(typeof y!=="number")return H.o(y)
 y=z-y
 this.r=y
 this.e=z
-this.x=1000/y
-document.querySelector("#text").textContent=C.jn.X(J.NQ(this.x))},"$1","ght",2,0,17],
-Zn:function(){var z,y,x,w,v,u,t,s,r,q,p,o,n,m
+this.x=1000/y},"$1","ght",2,0,17],
+Zn:function(){var z,y,x,w,v,u,t,s,r,q,p,o,n
 z=P.Td(["button",K.Eo("res/button.png",!1),"down",K.Eo("res/buttonDown.png",!1),"over",K.Eo("res/buttonOver.png",!1)])
-y=window.innerWidth
-if(typeof y!=="number")return y.T()
-x=y-100
-y=window.innerHeight
-if(typeof y!=="number")return y.T()
-w=y-100
-P.JS(w)
-if(w<x)x=w
-else w=x
-y=-x/4
-v=-1.4142*x/4
-u=x/4
-t=1.4142*x/4
-P.Td([0,H.J(new P.V(0,0),[null]),1,H.J(new P.V(y,y),[null]),2,H.J(new P.V(v,0),[null]),3,H.J(new P.V(y,u),[null]),4,H.J(new P.V(0,v),[null]),5,H.J(new P.V(0,t),[null]),6,H.J(new P.V(u,y),[null]),7,H.J(new P.V(t,0),[null]),8,H.J(new P.V(u,u),[null])])
+y=C.CD.zQ(document.getElementById("canvas").clientWidth)
+x=C.CD.zQ(document.getElementById("canvas").clientHeight)
+P.JS(x)
+if(x<y)y=x
+else x=y
+w=-y/4
+v=-1.4142*y/4
+u=y/4
+t=1.4142*y/4
+P.Td([0,H.J(new P.V(0,0),[null]),1,H.J(new P.V(w,w),[null]),2,H.J(new P.V(v,0),[null]),3,H.J(new P.V(w,u),[null]),4,H.J(new P.V(0,v),[null]),5,H.J(new P.V(0,t),[null]),6,H.J(new P.V(u,w),[null]),7,H.J(new P.V(t,0),[null]),8,H.J(new P.V(u,u),[null])])
 for(s=this.b,r=0;r<9;++r){q=K.DM(z.p(0,"button"),0,0)
 s[r]=q
 p=new P.V(0.5,0.5)
 p.$builtinTypeInfo=[null]
 q.dy=p
-J.Vg(s[r]).yI(new O.Eu(this,r))}J.Sr(this.a.Q.p(0,"mouseUp")).yI(new O.Pl(this,z))
-J.Sr(this.a.Q.p(0,"touchEnd")).yI(new O.YT(this,z))
-q=this.Q
-q.lO(x,w)
-p=this.c
-p.f=H.J(new P.V(x/2,w/2),[null])
-p.Aj()
-for(o=p.dy,r=0;r<9;++r){n=s[r]
-m=new P.V(0.5,0.5)
-m.$builtinTypeInfo=[null]
-n.sdU(m)
-o.push(s[r])}J.eC(s[0],H.J(new P.V(0,0),[null]))
-J.eC(s[1],H.J(new P.V(y,y),[null]))
+J.Vg(s[r]).yI(new O.Eu(this,r))}this.Q.lO(y,x)
+q=this.c
+q.f=H.J(new P.V(y/2,x/2),[null])
+q.Aj()
+for(p=q.dy,r=0;r<9;++r){o=s[r]
+n=new P.V(0.5,0.5)
+n.$builtinTypeInfo=[null]
+o.sdU(n)
+p.push(s[r])}J.eC(s[0],H.J(new P.V(0,0),[null]))
+J.eC(s[1],H.J(new P.V(w,w),[null]))
 J.eC(s[2],H.J(new P.V(v,0),[null]))
-J.eC(s[3],H.J(new P.V(y,u),[null]))
+J.eC(s[3],H.J(new P.V(w,u),[null]))
 J.eC(s[4],H.J(new P.V(0,v),[null]))
 J.eC(s[5],H.J(new P.V(0,t),[null]))
-J.eC(s[6],H.J(new P.V(u,y),[null]))
+J.eC(s[6],H.J(new P.V(u,w),[null]))
 J.eC(s[7],H.J(new P.V(t,0),[null]))
 J.eC(s[8],H.J(new P.V(u,u),[null]))
-for(r=0;r<9;++r){y=s[r]
+for(r=0;r<9;++r){w=s[r]
 v=new P.V(0.5,0.5)
 v.$builtinTypeInfo=[null]
-y.sdU(v)
-o.push(s[r])}this.y=new P.iP(Date.now(),!1)
-this.a.dy.push(p)
-this.e=this.y.Q
-document.getElementById("viewContainer").appendChild(q.c)
-y=H.J(new W.RO(window,"resize",!1),[null])
-H.J(new W.xC(0,y.Q,y.a,W.Y(this.ga7()),y.b),[H.Z(y,0)]).Z()
-y=window
+w.sdU(v)
+p.push(s[r])}this.a.dy.push(q)
+w=H.J(new W.RO(window,"resize",!1),[null])
+H.J(new W.xC(0,w.Q,w.a,W.W(this.ga7()),w.b),[H.Z(w,0)]).Z()
+w=Date.now()
+this.y=new P.iP(w,!1)
+this.e=w
+w=window
 v=this.ght(this)
-C.ol.y4(y)
-C.ol.ne(y,W.Y(v))},
+C.ol.y4(w)
+C.ol.ne(w,W.W(v))},
 static:{N:function(){var z,y,x,w,v,u,t,s,r,q,p,o,n
-z=new K.X(null,!1,H.J(new P.V(400,-300),[null]),H.J(new P.V(0,0),[null]),null,null,null,800,800,!1,null,null)
-z.Y(800,800,null,!1,!0)
-y=J.L(z.c,!1,!1,!1,!0)
-z.e=y
-if(y==null)H.vh("This browser does not support webGL. Try using the canvas renderer")
-x=J.O(z.c)
-H.J(new W.xC(0,x.Q,x.a,W.Y(z.ghy()),x.b),[H.Z(x,0)]).Z()
-x=J.W(z.c)
-H.J(new W.xC(0,x.Q,x.a,W.Y(z.gcV()),x.b),[H.Z(x,0)]).Z()
-J.S(y,2929)
-y.disable(2884)
-y.enable(3042)
-y.colorMask(!0,!0,!0,!0)
-z.lO(800,800)
-x=new K.G7(null,null,P.u5(),null,null,null,null,null,1000,!1,0,0,null)
-x.JX(y,1000)
-z.z=x
-x=new K.Ky(null,null,P.u5())
-x.PZ(y)
-z.ch=x
+z=$.wy()
+y=new K.X(null,!1,H.J(new P.V(400,-300),[null]),H.J(new P.V(0,0),[null]),null,null,null,800,800,!1,null,null)
+y.Y(800,800,z,!1,!0)
+x=J.L(y.c,!1,!1,!1,!0)
+y.e=x
+if(x==null)H.vh("This browser does not support webGL. Try using the canvas renderer")
+z=J.O(y.c)
+H.J(new W.xC(0,z.Q,z.a,W.W(y.ghy()),z.b),[H.Z(z,0)]).Z()
+z=J.S(y.c)
+H.J(new W.xC(0,z.Q,z.a,W.W(y.gcV()),z.b),[H.Z(z,0)]).Z()
+J.c2(x,2929)
+x.disable(2884)
+x.enable(3042)
+x.colorMask(!0,!0,!0,!0)
+y.lO(800,800)
+z=new K.G7(null,null,P.u5(),null,null,null,null,null,1000,!1,0,0,null)
+z.JX(x,1000)
+y.z=z
+z=new K.Ky(null,null,P.u5())
+z.PZ(x)
+y.ch=z
 w=C.xB.bS("#f0f0f0")
-if(C.xB.nC(w,"#")){x=w.length
-if(x===4){if(1>=x)return H.e(w,1)
+if(C.xB.nC(w,"#")){z=w.length
+if(z===4){if(1>=z)return H.e(w,1)
 v=w[1]
 u=H.Hp(v+v,16,null)
-if(2>=x)return H.e(w,2)
+if(2>=z)return H.e(w,2)
 v=w[2]
 t=H.Hp(v+v,16,null)
-if(3>=x)return H.e(w,3)
-x=w[3]
-s=H.Hp(x+x,16,null)}else if(x===7){u=H.Hp(C.xB.Nj(w,1,3),16,null)
+if(3>=z)return H.e(w,3)
+z=w[3]
+s=H.Hp(z+z,16,null)}else if(z===7){u=H.Hp(C.xB.Nj(w,1,3),16,null)
 t=H.Hp(C.xB.Nj(w,3,5),16,null)
 s=H.Hp(C.xB.Nj(w,5,7),16,null)}else{u=0
 t=0
 s=0}}else if(C.xB.nC(w,"rgb")){r=new H.VR("rgba?\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)",H.v4("rgba?\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)",!1,!0,!1),null,null).ej(w)
-if(r!=null){x=r.a
-if(1>=x.length)return H.e(x,1)
-u=H.Hp(x[1],10,null)
-if(2>=x.length)return H.e(x,2)
-t=H.Hp(x[2],10,null)
-if(3>=x.length)return H.e(x,3)
-s=H.Hp(x[3],10,null)}else{u=0
+if(r!=null){z=r.a
+if(1>=z.length)return H.e(z,1)
+u=H.Hp(z[1],10,null)
+if(2>=z.length)return H.e(z,2)
+t=H.Hp(z[2],10,null)
+if(3>=z.length)return H.e(z,3)
+s=H.Hp(z[3],10,null)}else{u=0
 t=0
 s=0}}else{u=0
 t=0
-s=0}x=H.J(new P.V(0,0),[null])
+s=0}z=H.J(new P.V(0,0),[null])
 v=H.J(new P.V(0,0),[null])
 q=H.J(new P.V(1,1),[null])
 p=new K.ab(null)
 p.c0()
-p=new K.a4(new K.zZ(u,t,s),[],!0,x,v,q,0,1,1,p,!0,!1,!0,new K.I1(P.u5()),!1,!1,P.M(null,null,null,P.P),null)
+p=new K.a4(new K.zZ(u,t,s),[],!0,z,v,q,0,1,1,p,!0,!1,!0,new K.I1(P.u5()),!1,!1,P.M(null,null,null,P.P),null)
 q=new K.ab(null)
 q.c0()
 p.cx=q
@@ -4191,11 +4178,11 @@ p.ch=1
 q=Array(9)
 q.fixed$length=Array
 v=H.J(new P.V(0,0),[null])
-x=H.J(new P.V(0,0),[null])
+z=H.J(new P.V(0,0),[null])
 o=H.J(new P.V(1,1),[null])
 n=new K.ab(null)
 n.c0()
-n=new O.dw(z,p,q,new K.IT([],!0,v,x,o,0,1,1,n,!0,!1,!0,new K.I1(P.u5()),!1,!1,P.M(null,null,null,P.P),null),0,null,null,null,null,null)
+n=new O.dw(y,p,q,new K.IT([],!0,v,z,o,0,1,1,n,!0,!1,!0,new K.I1(P.u5()),!1,!1,P.M(null,null,null,P.P),null),0,null,null,null,null,null)
 n.Zn()
 return n}}},
 Eu:{
@@ -4208,16 +4195,7 @@ y=z[y]
 z=J.R(y)
 x=J.lX(z.gZl(y),-1)
 z.sZl(y,x)
-return x}},
-Pl:{
-"^":"r:2;Q,a",
-$1:function(a){var z,y,x
-for(z=this.Q.c,z=z.gu(z),y=this.a;z.D();){x=z.gk()
-x.Q7(x.glX()?y.p(0,"over"):y.p(0,"button"))}}},
-YT:{
-"^":"r:2;Q,a",
-$1:function(a){var z,y
-for(z=this.Q.c,z=z.gu(z),y=this.a;z.D();)z.gk().Q7(y.p(0,"button"))}}},1],["","",,K,{
+return x}}},1],["","",,K,{
 "^":"",
 zZ:{
 "^":"a;Q,a,b"},
@@ -4519,25 +4497,25 @@ z=this.c
 this.a=b
 J.OE(z,b)}],
 Y:function(a,b,c,d,e){var z,y,x,w,v
-z=document.createElement("canvas",null)
-y=z
-this.c=y
-if(e){x=new K.pk(this,y,null)
+if(c!=null)z=c
+else{y=document.createElement("canvas",null)
+z=y}this.c=z
+if(e){x=new K.pk(this,z,null)
 w=H.J(new W.RO(document,"mouseup",!1),[null])
-H.J(new W.xC(0,w.Q,w.a,W.Y(x.gol()),w.b),[H.Z(w,0)]).Z()
-w=J.R(y)
-v=w.gVY(y)
-H.J(new W.xC(0,v.Q,v.a,W.Y(x.gol()),v.b),[H.Z(v,0)]).Z()
-w=w.gf0(y)
-H.J(new W.xC(0,w.Q,w.a,W.Y(x.gol()),w.b),[H.Z(w,0)]).Z()
-w=H.J(new W.Cq(y,"touchstart",!1),[null])
-H.J(new W.xC(0,w.Q,w.a,W.Y(x.gXO()),w.b),[H.Z(w,0)]).Z()
-w=H.J(new W.Cq(y,"touchend",!1),[null])
-H.J(new W.xC(0,w.Q,w.a,W.Y(x.gXO()),w.b),[H.Z(w,0)]).Z()
-y=H.J(new W.Cq(y,"touchmove",!1),[null])
-H.J(new W.xC(0,y.Q,y.a,W.Y(x.gXO()),y.b),[H.Z(y,0)]).Z()
-y=x}else y=null
-this.d=y
+H.J(new W.xC(0,w.Q,w.a,W.W(x.gol()),w.b),[H.Z(w,0)]).Z()
+w=J.R(z)
+v=w.gVY(z)
+H.J(new W.xC(0,v.Q,v.a,W.W(x.gol()),v.b),[H.Z(v,0)]).Z()
+w=w.gf0(z)
+H.J(new W.xC(0,w.Q,w.a,W.W(x.gol()),w.b),[H.Z(w,0)]).Z()
+w=H.J(new W.Cq(z,"touchstart",!1),[null])
+H.J(new W.xC(0,w.Q,w.a,W.W(x.gXO()),w.b),[H.Z(w,0)]).Z()
+w=H.J(new W.Cq(z,"touchend",!1),[null])
+H.J(new W.xC(0,w.Q,w.a,W.W(x.gXO()),w.b),[H.Z(w,0)]).Z()
+z=H.J(new W.Cq(z,"touchmove",!1),[null])
+H.J(new W.xC(0,z.Q,z.a,W.W(x.gXO()),z.b),[H.Z(z,0)]).Z()
+z=x}else z=null
+this.d=z
 J.TZ(this.c,this.Q)
 J.OE(this.c,this.a)}},
 uP:{
@@ -4871,7 +4849,7 @@ z=J.t(a)
 if(!!z.$ispA)if(a.complete===!0){this.b=!0
 this.Q=a.width
 this.a=a.height}else{z=H.J(new W.Cq(a,"load",!1),[null])
-H.J(new W.xC(0,z.Q,z.a,W.Y(new K.J7(this,a)),z.b),[H.Z(z,0)]).Z()}else if(!!z.$isNy){this.b=!0
+H.J(new W.xC(0,z.Q,z.a,W.W(new K.J7(this,a)),z.b),[H.Z(z,0)]).Z()}else if(!!z.$isNy){this.b=!0
 this.Q=a.width
 this.a=a.height}else this.c=null},
 static:{ac:function(a){var z=new K.Ap(100,100,!1,null,P.bK(null,null,!1,null),!0)
@@ -4980,7 +4958,6 @@ J.Kr=function(a){return J.R(a).e6(a)}
 J.L=function(a,b,c,d,e){return J.R(a).nA(a,b,c,d,e)}
 J.LF=function(a,b,c){return J.R(a).IW(a,b,c)}
 J.Lz=function(a){return J.t(a).X(a)}
-J.NQ=function(a){return J.Wx(a).zQ(a)}
 J.Nj=function(a,b,c){return J.rY(a).Nj(a,b,c)}
 J.Nu=function(a,b,c,d){return J.R(a).Ci(a,b,c,d)}
 J.Nx=function(a){return J.w1(a).gu(a)}
@@ -4988,7 +4965,7 @@ J.O=function(a){return J.R(a).gSM(a)}
 J.OE=function(a,b){return J.R(a).sfg(a,b)}
 J.Oo=function(a,b){return J.R(a).CF(a,b)}
 J.Oq=function(a){return J.Wx(a).Hp(a)}
-J.S=function(a,b){return J.R(a).yB(a,b)}
+J.S=function(a){return J.R(a).gxW(a)}
 J.Sr=function(a){return J.R(a).gvq(a)}
 J.TZ=function(a,b){return J.R(a).sN(a,b)}
 J.Tf=function(a,b){if(a.constructor==Array||typeof a=="string"||H.wV(a,a[init.dispatchPropertyName]))if(b>>>0===b&&b<a.length)return a[b]
@@ -4996,10 +4973,10 @@ return J.U6(a).p(a,b)}
 J.UN=function(a,b){if(typeof a=="number"&&typeof b=="number")return a<b
 return J.Wx(a).w(a,b)}
 J.Vg=function(a){return J.R(a).gVl(a)}
-J.W=function(a){return J.R(a).gxW(a)}
 J.WB=function(a,b){if(typeof a=="number"&&typeof b=="number")return a+b
 return J.Qc(a).g(a,b)}
 J.Yj=function(a,b){return J.R(a).sLA(a,b)}
+J.c2=function(a,b){return J.R(a).yB(a,b)}
 J.eC=function(a,b){return J.R(a).sbM(a,b)}
 J.fi=function(a){return J.R(a).glZ(a)}
 J.i3=function(a,b){return J.R(a).zx(a,b)}
@@ -5194,7 +5171,7 @@ var w=a[y+1]
 var v=a[y+2]
 I.$lazy(x,w,v)}})(["Kb","Rs",function(){return H.yl()},"rS","p6",function(){return new P.kM(null)},"lm","WD",function(){return H.cM(H.S7({toString:function(){return"$receiver$"}}))},"k1","OI",function(){return H.cM(H.S7({$method$:null,toString:function(){return"$receiver$"}}))},"Re","PH",function(){return H.cM(H.S7(null))},"fN","D1",function(){return H.cM(function(){var $argumentsExpr$='$arguments$'
 try{null.$method$($argumentsExpr$)}catch(z){return z.message}}())},"qi","rx",function(){return H.cM(H.S7(void 0))},"rZ","Y9",function(){return H.cM(function(){var $argumentsExpr$='$arguments$'
-try{(void 0).$method$($argumentsExpr$)}catch(z){return z.message}}())},"BX","zO",function(){return H.cM(H.Mj(null))},"tt","Bi",function(){return H.cM(function(){try{null.$method$}catch(z){return z.message}}())},"dt","eA",function(){return H.cM(H.Mj(void 0))},"A7","ko",function(){return H.cM(function(){try{(void 0).$method$}catch(z){return z.message}}())},"lI","ej",function(){return P.Oj()},"xg","xb",function(){return[]},"i7","WP",function(){return P.u5()},"ZN","kQ",function(){return P.u5()}])
+try{(void 0).$method$($argumentsExpr$)}catch(z){return z.message}}())},"BX","zO",function(){return H.cM(H.Mj(null))},"tt","Bi",function(){return H.cM(function(){try{null.$method$}catch(z){return z.message}}())},"dt","eA",function(){return H.cM(H.Mj(void 0))},"A7","ko",function(){return H.cM(function(){try{(void 0).$method$}catch(z){return z.message}}())},"lI","ej",function(){return P.Oj()},"xg","xb",function(){return[]},"Y","wy",function(){return W.wl().getElementById("canvas")},"i7","WP",function(){return P.u5()},"ZN","kQ",function(){return P.u5()}])
 I=I.$finishIsolateConstructor(I)
 $=new I()
 init.metadata=[null]

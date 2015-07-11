@@ -54,19 +54,10 @@ class testApplication {
 
       tex[j] = new Sprite(textures["button"]);
       tex[j].anchor = new Point(0.5,0.5);
-
       tex[j].onClick.listen((e) => tex[j].scale *= -1);
-
 
     }
 
-    this.stage.onMouseUp.listen((e) {
-      for (var b in this.holder) b.setTexture(b.isOver ? textures["over"] : textures["button"]);
-    });
-
-    this.stage.onTouchEnd.listen((e) {
-      for (var b in this.holder) b.setTexture(textures["button"]);
-    });
 
     renderer.resize(width, height);
 
@@ -92,23 +83,15 @@ class testApplication {
       holder.children.add(tex[j]);
     }
 
-
-    dateTime = new DateTime.now();
     stage.children.add(holder);
-
-
-
-    lastFrame = dateTime.millisecondsSinceEpoch;
-
-
 
     window.onResize.listen(resize);
 
-    window.requestAnimationFrame(this._animate);
-  }
+    dateTime = new DateTime.now();
+    lastFrame = dateTime.millisecondsSinceEpoch;
 
-  void flip(InteractionEvent event){
-    querySelector("#text").text = "Yay?";
+
+    window.requestAnimationFrame(this._animate);
   }
 
   void resize(Event e){
@@ -149,7 +132,6 @@ class testApplication {
     timeDiff = thisFrame - lastFrame;
     lastFrame = thisFrame;
     fps = 1000/timeDiff;
-    querySelector("#text").text = (fps).round().toString();
   }
 
   void bind(){
