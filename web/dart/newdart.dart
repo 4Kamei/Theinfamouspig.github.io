@@ -4,7 +4,8 @@ import 'dart:math' as Math;
 
 class testApplication {
 
-  var renderer = new WebGLRenderer(width: 800, height: 800, interactive:true);
+  static var myCanvas = document.getElementById("canvas");
+  var renderer = new WebGLRenderer(width: 800, height: 800, interactive:true, view: myCanvas);
   var stage = new Stage(new Colour.fromHtml('#f0f0f0'));
   var tex = new List(9);
   var holder = new DisplayObjectContainer();
@@ -18,14 +19,15 @@ class testApplication {
 
   testApplication(){
 
+
     var textures = {
       "button"	: new Texture.fromImage("res/button.png"),
       "down"		: new Texture.fromImage("res/buttonDown.png"),
       "over"		: new Texture.fromImage("res/buttonOver.png")
     };
 
-    int width = window.innerWidth-100;
-    int height = window.innerHeight-100;
+    int width = document.getElementById("canvas").clientWidth;
+    int height = document.getElementById("canvas").clientHeight;
     print(height);
     if(height < width){
       width = height;
@@ -35,7 +37,7 @@ class testApplication {
     double sqrt2 = 1.4142;
 
     var positions = {
-      0         : new Point(0,0),
+      0 : new Point(0,0),
       1 : new Point(-width/4,-width/4),
       2 : new Point(-sqrt2*width/4,0),
       3 : new Point(-width/4,width/4),
@@ -99,7 +101,6 @@ class testApplication {
     lastFrame = dateTime.millisecondsSinceEpoch;
 
 
-    document.getElementById("viewContainer").append(this.renderer.view);
 
     window.onResize.listen(resize);
 
@@ -111,14 +112,9 @@ class testApplication {
   }
 
   void resize(Event e){
-    int width = window.innerWidth-100;
-    int height = window.innerHeight-100;
-    print(height);
-    if(height < width){
-      width = height;
-    }else{
-      height = width;
-    }
+    int width = document.getElementById("canvas").clientWidth;
+    int height = document.getElementById("canvas").clientHeight;
+
     double sqrt2 = 1.4142;
 
     renderer.resize(width, height);

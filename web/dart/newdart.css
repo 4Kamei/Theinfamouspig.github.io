@@ -6,12 +6,20 @@ h1, p {
 }
 
 #viewContainer{
-    margin-left: auto;
-    margin-right: auto;
     width: 100%;
-    height: 100%;
+    text-align:center;
 }
-
+#canvas{
+    border: 1px solid red;
+}
+#center{
+    position: relative;
+    margin-top: 80px;
+    width: 30%;
+}
+#spacer2{
+    margin-bottom: -20px;
+}
 #text {
     width: 120px;
     text-align: left;

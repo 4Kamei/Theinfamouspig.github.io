@@ -26,11 +26,36 @@
         </nav>
     </div>
 </header>
-<div class="content">
-    <div id="viewContainer">
-    </div>
-    <footer> Frames Per Second: <a id="text"> </a> </footer>
+<div id="spacer2"></div>
+<div id="center">
+            <canvas id="canvas"> T......T.....Test </canvas>
 </div>
+<script>
+    //2 'event handlers' in one.
+    window.onload = window.onresize = function() {
+        var c2VP = 0.95;        // canvas width to viewport width ratio
+        var cW2cH = 1;   // canvas width to canvas height ratio
+        var canvas = document.getElementById("canvas");
+        var viewportWidth = window.innerWidth;
+        var viewportHeight = window.innerHeight;
+        var canvasWidth;
+
+        //Some error I made somewhere. This fixes it.
+        c2VP *= cW2cH;
+
+        viewportHeight = viewportHeight-69;
+        //Make sure the thingy first in the width and height
+        if(viewportWidth > viewportHeight)  canvasWidth = viewportHeight * c2VP;
+        else                                canvasWidth = viewportWidth * c2VP;
+        var canvasHeight = canvasWidth / cW2cH;
+
+        canvas.style.position = "fixed";
+        canvas.setAttribute("width", canvasWidth);
+        canvas.setAttribute("height", canvasHeight);
+        canvas.style.top = (viewportHeight - canvasHeight) / 2 + 69 + "px";
+        canvas.style.left = (viewportWidth - canvasWidth) / 2 + "px";
+    }
+</script>
 
 <script type="application/dart" src="newdart.dart"></script>
 <script src="packages/browser/dart.js"></script>
