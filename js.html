@@ -121,7 +121,7 @@
                 });
 
                 function onMouseMove(event){
-                    mesh.rotation.z = -event.clientY/100;
+                    mesh.rotation.z += -Math.cos(event.clientY/100);
                 }
 
                 function onMouseDown(event){
