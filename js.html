@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Kappa</title>
+    <link  type="text/css" rel="stylesheet" href="js.css">
+    <link  type="text/css" rel="stylesheet" href="../pageRes/style.css">
+
+</head>
+
+<body>
+<header id="header">
+    <div class="rectangle" id="topRect">
+        <div id="spacer"> </div>
+        <nav role='navigation'>
+                    <span>
+                        <a class="button" href="../pageRes/index.html"> Home </a>
+                    </span>
+                    <span>
+                        <a class="buttonClicked"> Messing 'Bout with dart </a>
+                    </span>
+                    <span>
+                        <a class="button" href="../pageRes/computing.html"> Sorting Algorithms </a>
+                    </span>
+        </nav>
+    </div>
+</header>
+<div id="spacer2"></div>
+<div id="center">
+            <canvas id="canvas"> T......T.....Test </canvas>
+</div>
+<script>
+    //2 'event handlers' in one.
+    window.onload = window.onresize = function() {
+        var c2VP = 0.95;        // canvas width to viewport width ratio
+        var cW2cH = 1;   // canvas width to canvas height ratio
+        var canvas = document.getElementById("canvas");
+        var viewportWidth = window.innerWidth;
+        var viewportHeight = window.innerHeight;
+        var canvasWidth;
+
+        //Some error I made somewhere. This fixes it.
+        c2VP *= cW2cH;
+
+        viewportHeight = viewportHeight-69;
+        //Make sure the thingy first in the width and height
+        if(viewportWidth > viewportHeight)  canvasWidth = viewportHeight * c2VP;
+        else                                canvasWidth = viewportWidth * c2VP;
+        var canvasHeight = canvasWidth / cW2cH;
+
+        canvas.style.position = "fixed";
+        canvas.setAttribute("width", canvasWidth);
+        canvas.setAttribute("height", canvasHeight);
+        canvas.style.top = (viewportHeight - canvasHeight) / 2 + 69 + "px";
+        canvas.style.left = (viewportWidth - canvasWidth) / 2 + "px";
+    }
+</script>
+
+<script type="application/dart" src="web/dart/newdart.dart"></script>
+<script src="web/dart/res/packages/browser/dart.js"></script>
+
+
+</body>
+</html>
