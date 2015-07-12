@@ -18,7 +18,7 @@
                         <a class="button" href="index.html"> Home </a>
                     </span>
                     <span>
-                        <a class="buttonClicked"> Messing 'Bout with dart </a>
+                        <a class="buttonClicked"> Crate </a>
                     </span>
                     <span>
                         <a class="button" href="computing/bubbleSort.html"> Sorting Algorithms </a>
@@ -26,38 +26,126 @@
         </nav>
     </div>
 </header>
-<div id="spacer2"></div>
-<div id="center">
-            <canvas id="canvas"> T......T.....Test </canvas>
-</div>
-<script>
-    //2 'event handlers' in one.
-    window.onload = window.onresize = function() {
-        var c2VP = 0.95;        // canvas width to viewport width ratio
-        var cW2cH = 1;   // canvas width to canvas height ratio
-        var canvas = document.getElementById("canvas");
-        var viewportWidth = window.innerWidth;
-        var viewportHeight = window.innerHeight;
-        var canvasWidth;
+    <canvas id="canvas">
+        Woo tree.js
+    </canvas>
 
-        //Some error I made somewhere. This fixes it.
-        c2VP *= cW2cH;
+        <script src="packages/three.min.js"></script>
+        <script>
+            var     scene,
+                    camera,
+                    renderer,
+                    mesh,
+                    canvas = document.getElementById("canvas"),
+                    toggle = false;
 
-        viewportHeight = viewportHeight-69;
-        //Make sure the thingy first in the width and height
-        if(viewportWidth > viewportHeight)  canvasWidth = viewportHeight * c2VP;
-        else                                canvasWidth = viewportWidth * c2VP;
-        var canvasHeight = canvasWidth / cW2cH;
+            init();
+            animate();
 
-        canvas.style.position = "fixed";
-        canvas.setAttribute("width", canvasWidth);
-        canvas.setAttribute("height", canvasHeight);
-        canvas.style.top = (viewportHeight - canvasHeight) / 2 + 69 + "px";
-        canvas.style.left = (viewportWidth - canvasWidth) / 2 + "px";
-    }
-</script>
+            window.onload = window.onresize = function() {
+                var     c2VP = 0.95,   // canvas width to viewport width ratio
+                        cW2cH = 1,     // canvas width to canvas height ratio
+                        viewportWidth = window.innerWidth,
+                        viewportHeight = window.innerHeight,
+                        canvas = document.getElementById("canvas"),
+                        canvasWidth,
+                        canvasHeight;
 
-<script type="application/javascript" src="main.js"></script>
+                //Some error I made somewhere. This fixes it.
+                c2VP *= cW2cH;
 
+                viewportHeight = viewportHeight-69;
+                //Make sure the thingy first in the width and height
+                if(viewportWidth > viewportHeight)
+                    canvasWidth = viewportHeight * c2VP;
+                else
+                    canvasWidth = viewportWidth * c2VP;
+
+                canvasHeight = canvasWidth / cW2cH;
+
+                renderer.setSize(canvasWidth, canvasHeight);
+
+                camera.aspect = canvasWidth/canvasHeight;
+                camera.updateProjectionMatrix();
+
+                canvas.style.position = "fixed";
+                canvas.setAttribute("width", canvasWidth);
+                canvas.setAttribute("height", canvasHeight);
+
+                canvas.style.top = (viewportHeight - canvasHeight) / 2 + 69 + "px";
+                canvas.style.left = (viewportWidth - canvasWidth) / 2 + "px";
+
+
+            };
+
+
+            function init(){
+
+                renderer = new THREE.WebGLRenderer({canvas: canvas}, {antialias:true});
+                renderer.setSize(WIDTH, HEIGHT);
+
+                document.body.appendChild( renderer.domElement );
+
+
+                var geometry = new THREE.CircleGeometry(200,200);
+                var texture = THREE.ImageUtils.loadTexture('tex/crate.jpg');
+                texture.anisotropy = renderer.getMaxAnisotropy();
+
+                var material = new THREE.MeshBasicMaterial( {map: texture});
+                mesh = new THREE.Mesh(geometry, material);
+
+
+                scene = new THREE.Scene();
+                var     WIDTH = canvas.clientWidth,
+                        HEIGHT = canvas.clientHeight;
+
+                camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 0.1, 20000);
+                camera.position.z = 900;
+
+                scene.add(mesh);
+                scene.add(camera);
+
+                renderer.setClearColor(0x222222, 1);
+
+                // Create a light, set its position, and add it to the scene.
+                var light = new THREE.PointLight(0xffffff);
+                light.position.set(-100,200,100);
+                scene.add(light);
+
+                canvas.addEventListener('mousedown', function(e){
+                    onMouseDown(e);
+                });
+
+                canvas.addEventListener('mousemove', function(e){
+                    onMouseMove(e);
+                });
+
+                function onMouseMove(event){
+                    mesh.rotation.z = -event.clientY/100;
+                }
+
+                function onMouseDown(event){
+                    event.preventDefault();
+
+                }
+            }
+
+
+            function animate() {
+                // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
+                requestAnimationFrame(animate);
+
+
+                mesh.rotation.z += 0.01;
+
+                renderer.render( scene, camera );
+
+            }
+
+
+                //2 'event handlers' in one.
+
+
+        </script>
 </body>
 </html>
