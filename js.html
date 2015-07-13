@@ -36,6 +36,12 @@
                     camera,
                     renderer,
                     mesh,
+                    mouse,
+                    canvasLeft,
+                    canvasTop,
+                    canvasWidth,
+                    canvasHeight,
+                    raycaster,
                     canvas = document.getElementById("canvas"),
                     toggle = false;
 
@@ -47,9 +53,7 @@
                         cW2cH = 1,     // canvas width to canvas height ratio
                         viewportWidth = window.innerWidth,
                         viewportHeight = window.innerHeight,
-                        canvas = document.getElementById("canvas"),
-                        canvasWidth,
-                        canvasHeight;
+                        canvas = document.getElementById("canvas");
 
                 //Some error I made somewhere. This fixes it.
                 c2VP *= cW2cH;
@@ -72,22 +76,24 @@
                 canvas.setAttribute("width", canvasWidth);
                 canvas.setAttribute("height", canvasHeight);
 
-                canvas.style.top = (viewportHeight - canvasHeight) / 2 + 69 + "px";
-                canvas.style.left = (viewportWidth - canvasWidth) / 2 + "px";
+                canvasTop = (viewportHeight - canvasHeight) / 2 + 69;
+                canvasLeft = (viewportWidth - canvasWidth) / 2;
 
+                canvas.style.top = canvasTop + "px";
+                canvas.style.left = canvasLeft + "px";
 
             };
 
 
             function init(){
+                mouse = new THREE.Vector2();
+                raycaster = new THREE.Raycaster();
 
                 renderer = new THREE.WebGLRenderer({canvas: canvas}, {antialias:true});
                 renderer.setSize(WIDTH, HEIGHT);
 
-                document.body.appendChild( renderer.domElement );
 
-
-                var geometry = new THREE.CircleGeometry(200,200);
+                var geometry = new THREE.CubeGeometry(200,200,200);
                 var texture = THREE.ImageUtils.loadTexture('tex/crate.jpg');
                 texture.anisotropy = renderer.getMaxAnisotropy();
 
@@ -121,7 +127,9 @@
                 });
 
                 function onMouseMove(event){
-                    mesh.rotation.z += -Math.cos(event.clientY/100);
+                    event.preventDefault();
+                    mouse.x = ((event.clientX - canvasLeft) / canvasWidth) * 2 - 1;
+                    mouse.y = - ((event.clientY - canvasTop ) / canvasHeight ) * 2 + 1;
                 }
 
                 function onMouseDown(event){
@@ -135,11 +143,18 @@
                 // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
                 requestAnimationFrame(animate);
 
+                mesh.material.color.set(0xcccfff);
 
-                mesh.rotation.z += 0.01;
+                mesh.rotation.x += 0.01;
+                mesh.rotation.z += 0.02;
+
+                raycaster.setFromCamera(mouse, camera);
+                var objects = raycaster.intersectObjects(scene.children);
+
+                for( var i = 0; i < objects.length; i++)
+                    objects[i].object.material.color.set(0xfffccc);
 
                 renderer.render( scene, camera );
-
             }
 
 
