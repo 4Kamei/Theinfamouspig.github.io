@@ -37,16 +37,19 @@
                     renderer,
                     mesh,
                     mouse,
+                    mouseNorm,
                     canvasLeft,
                     canvasTop,
-                    canvasWidth,
-                    canvasHeight,
+                    canvasWidth = 0,
+                    canvasHeight = 0,
                     raycaster,
+                    angle = 0,
+                    object = [],
                     canvas = document.getElementById("canvas"),
                     toggle = false;
 
             init();
-            animate();
+            render();
 
             window.onload = window.onresize = function() {
                 var     c2VP = 0.95,   // canvas width to viewport width ratio
@@ -82,42 +85,65 @@
                 canvas.style.top = canvasTop + "px";
                 canvas.style.left = canvasLeft + "px";
 
-            };
+                mouse.x = 0;
+                mouse.y = 0;
+                mouseNorm.x = 0;
+                mouseNorm.y = 0;
 
+            };
 
             function init(){
                 mouse = new THREE.Vector2();
+                mouseNorm = new THREE.Vector2();
                 raycaster = new THREE.Raycaster();
 
                 renderer = new THREE.WebGLRenderer({canvas: canvas}, {antialias:true});
-                renderer.setSize(WIDTH, HEIGHT);
 
-
-                var geometry = new THREE.CubeGeometry(200,200,200);
-                var texture = THREE.ImageUtils.loadTexture('tex/crate.jpg');
-                texture.anisotropy = renderer.getMaxAnisotropy();
-
-                var material = new THREE.MeshBasicMaterial( {map: texture});
-                mesh = new THREE.Mesh(geometry, material);
-
-
-                scene = new THREE.Scene();
                 var     WIDTH = canvas.clientWidth,
                         HEIGHT = canvas.clientHeight;
 
-                camera = new THREE.PerspectiveCamera(45, WIDTH / HEIGHT, 0.1, 20000);
-                camera.position.z = 900;
+                renderer.setSize(WIDTH, HEIGHT);
 
-                scene.add(mesh);
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera(80, WIDTH / HEIGHT, 1, 4000);
+                camera.position.z = 1000;
+
+                var particles = new THREE.Geometry;
+
+                for (var p = 0; p < 2000; p++) {
+                    var rad = 700;
+                    var     x = Math.pow(Math.random(), 1/2)*rad-rad,
+                            y = Math.pow(Math.random(), 1/2)*rad-rad,
+                            z = Math.pow(Math.random(), 1/2)*rad-rad;
+                    x = Math.random() > 0.5 ? x * -1 : x;
+                    y = Math.random() > 0.5 ? y * -1 : y;
+                    z = Math.random() > 0.5 ? z * -1 : z;
+
+                    var particle = new THREE.Vector3(x, y, z);
+                    particles.vertices.push(particle);
+                }
+
+                var material = new THREE.ParticleBasicMaterial({color: 0xff03f0},{size: 3});
+
+                var particleSystem = new THREE.ParticleSystem(particles, material);
+
+                scene.add(particleSystem);
+
+
+                //scene.add(mesh);
                 scene.add(camera);
+
 
                 renderer.setClearColor(0x222222, 1);
 
                 // Create a light, set its position, and add it to the scene.
-                var light = new THREE.PointLight(0xffffff);
-                light.position.set(-100,200,100);
-                scene.add(light);
 
+
+
+
+                canvas.addEventListener('scroll', function(e){
+                    onScroll(e);
+                });
                 canvas.addEventListener('mousedown', function(e){
                     onMouseDown(e);
                 });
@@ -128,37 +154,50 @@
 
                 function onMouseMove(event){
                     event.preventDefault();
-                    mouse.x = ((event.clientX - canvasLeft) / canvasWidth) * 2 - 1;
-                    mouse.y = - ((event.clientY - canvasTop ) / canvasHeight ) * 2 + 1;
+                    mouse.x = event.clientX - canvasLeft;
+                    mouse.y = event.clientY - canvasTop;
+                    mouseNorm.x = ((event.clientX - canvasLeft) / canvasWidth) * 2 - 1;
+                    mouseNorm.y = - ((event.clientY - canvasTop ) / canvasHeight ) * 2 + 1;
                 }
 
                 function onMouseDown(event){
                     event.preventDefault();
+                }
 
+                function onScroll(event){
+                    event.preventDefault();
+                    console.log(event.target);
                 }
             }
 
+            function update(){
 
-            function animate() {
+            }
+
+            function render() {
                 // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
-                requestAnimationFrame(animate);
+                requestAnimationFrame(render);
+                update();
 
-                mesh.material.color.set(0xcccfff);
-
-                mesh.rotation.x += 0.01;
-                mesh.rotation.z += 0.02;
-
+                angle += 0.01;
                 raycaster.setFromCamera(mouse, camera);
                 var objects = raycaster.intersectObjects(scene.children);
+                camera.position.x += (mouseNorm.x * canvasWidth/4 - camera.position.x) * 0.01;
+                camera.position.y += (mouseNorm.y * canvasHeight/4 - camera.position.y) * 0.01;
 
+                camera.lookAt(new THREE.Vector3(0, 0, 0));
                 for( var i = 0; i < objects.length; i++)
                     objects[i].object.material.color.set(0xfffccc);
 
                 renderer.render( scene, camera );
             }
 
+            function rotateCamera(focalPoint, radius, angle){
+                camera.lookAt(focalPoint);
+                camera.position.x  += radius * Math.sin(angle);
+                camera.position.z  = radius * Math.cos(angle);
 
-                //2 'event handlers' in one.
+            }
 
 
         </script>
