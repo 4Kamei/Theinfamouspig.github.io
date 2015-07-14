@@ -18,7 +18,7 @@
                         <a class="button" href="index.html"> Home </a>
                     </span>
                     <span>
-                        <a class="buttonClicked"> Crate </a>
+                        <a class="buttonClicked">  Fancy Shit Right Here </a>
                     </span>
                     <span>
                         <a class="button" href="computing/bubbleSort.html"> Sorting Algorithms </a>
@@ -42,6 +42,7 @@
                     canvasTop,
                     canvasWidth = 0,
                     canvasHeight = 0,
+                    radius = 900,
                     raycaster,
                     angle = 0,
                     object = [],
@@ -110,17 +111,27 @@
 
                 var particles = new THREE.Geometry;
 
-                for (var p = 0; p < 2000; p++) {
+                for (var p = 0; p < 5000; p++) {
+
+                    //Generate polar coods to convert into carteasian to make it look nicer
+                    // and stop with the cube roots.
+
                     var rad = 700;
-                    var     x = Math.pow(Math.random(), 1/2)*rad-rad,
-                            y = Math.pow(Math.random(), 1/2)*rad-rad,
-                            z = Math.pow(Math.random(), 1/2)*rad-rad;
-                    x = Math.random() > 0.5 ? x * -1 : x;
-                    y = Math.random() > 0.5 ? y * -1 : y;
-                    z = Math.random() > 0.5 ? z * -1 : z;
+                    do{
+                        var     x = Math.pow(Math.random(), 1/3)*rad-rad,
+                                y = Math.pow(Math.random(), 1/3)*rad-rad,
+                                z = Math.pow(Math.random(), 1/3)*rad-rad;
+                        x = Math.random() > 0.5 ? x * -1 : x;
+                        y = Math.random() > 0.5 ? y * -1 : y;
+                        z = Math.random() > 0.5 ? z * -1 : z;
+                    }while(x*x + y*y + z*z < 600*600 || x*x + y*y + z*z > 700*700);
+
+
 
                     var particle = new THREE.Vector3(x, y, z);
+                    object.push(particle);
                     particles.vertices.push(particle);
+
                 }
 
                 var material = new THREE.ParticleBasicMaterial({color: 0xff03f0},{size: 3});
@@ -141,7 +152,7 @@
 
 
 
-                canvas.addEventListener('scroll', function(e){
+                canvas.addEventListener('mousewheel', function(e){
                     onScroll(e);
                 });
                 canvas.addEventListener('mousedown', function(e){
@@ -166,12 +177,17 @@
 
                 function onScroll(event){
                     event.preventDefault();
-                    console.log(event.target);
+                    console.log(event.wheelDelta);
+                    radius += event.wheelDelta/10;
                 }
             }
 
             function update(){
-
+                /*
+                for(var i = 0; i < object.length; i++){
+                    object[i].position.x += 1;
+                }
+                */
             }
 
             function render() {
@@ -182,9 +198,9 @@
                 angle += 0.01;
                 raycaster.setFromCamera(mouse, camera);
                 var objects = raycaster.intersectObjects(scene.children);
-                camera.position.x += (mouseNorm.x * canvasWidth/4 - camera.position.x) * 0.01;
-                camera.position.y += (mouseNorm.y * canvasHeight/4 - camera.position.y) * 0.01;
-
+                camera.position.x += (mouseNorm.x * canvasWidth - camera.position.x) * 0.1;
+                camera.position.y += (mouseNorm.y * canvasHeight - camera.position.y) * 0.1;
+                camera.position.z = radius;
                 camera.lookAt(new THREE.Vector3(0, 0, 0));
                 for( var i = 0; i < objects.length; i++)
                     objects[i].object.material.color.set(0xfffccc);
