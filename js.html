@@ -44,10 +44,13 @@
                     canvasHeight = 0,
                     radius = 900,
                     raycaster,
+                    particles,
+                    particleSystem,
                     angle = 0,
                     object = [],
-                    canvas = document.getElementById("canvas"),
-                    toggle = false;
+                    notTrue = true,
+                    toggle = [],
+                    canvas = document.getElementById("canvas");
 
             init();
             render();
@@ -94,6 +97,11 @@
             };
 
             function init(){
+
+                var ret = cartesianToSpherical(new THREE.Vector3(200, 200, 200));
+                var cartCoords = sphericalToCartesian(ret[0], ret[1], ret[2]);
+                console.log(cartCoords.x + " : " + cartCoords.y + " : " + cartCoords.z);
+
                 mouse = new THREE.Vector2();
                 mouseNorm = new THREE.Vector2();
                 raycaster = new THREE.Raycaster();
@@ -111,13 +119,17 @@
 
                 var planeGeo = new THREE.PlaneGeometry( 2000, 2000 );
                 var planeMat = new THREE.MeshBasicMaterial( {color: 0x33333333, side: THREE.DoubleSide} );
+
+
                 var plane = new THREE.Mesh( planeGeo, planeMat );
                 plane.rotation.x = Math.PI/2;
                 //scene.add( plane );
 
-                var particles = new THREE.Geometry;
+                particles = new THREE.Geometry;
 
-                for (var p = 0; p < 1000; p++) {
+                var pCount = 5000;
+                toggle = Array.apply(null, new Array(pCount)).map(function(){ return true;});
+                for (var p = 0; p < pCount; p++) {
 
                     //Generate polar coods to convert into carteasian to make it look nicer
                     // and stop with the cube roots.
@@ -137,30 +149,53 @@
 
                     */
 
-                    var     rad = Math.pow(Math.random(), 1/2)*1000-1000,
-                            polar,
+                    var     rad = 400,
+                            inclination,
                             azimuthal;
 
                     var     u = Math.random(),
                             v = Math.random();
 
-                    polar = Math.acos(2*v - 1);
-                    azimuthal = 2 * Math.PI * u;
+                    //Method of uniformly selecting points on the sphere using 2 random variables
 
-                    var coords = sphericalToCarteasian(rad, polar, azimuthal);
-                    console.log(coords.x + " : " + coords.y + " : " + coords.z);
+                    azimuthal = Math.PI * 2 * u;
+                    inclination = 0;
 
-                    console.log();
+                    var coords = sphericalToCartesian(rad, inclination, azimuthal);
+                    var cylCoords = sphericalToCylindrical(rad, inclination, azimuthal);
 
-                    var particle = coords;
+                    var cylindrical= {
+                        radius : cylCoords[0],
+                        azimuthal : cylCoords[1],
+                        z : cylCoords[2] + Math.random() * 4 -2
+                    };
+
+                    var spherical = {
+                        radius: rad,
+                        inclination: inclination,
+                        azimuth: azimuthal
+                    };
+
+                    var particle = {
+                        position: new THREE.Vector3(),
+                        sphPosition: spherical,
+                        cylPosition : cylindrical,
+                        velocity: new THREE.Vector3(0, 0,  cylCoords[2] + Math.random() * 4 -2)
+                    };
+
+                    particle.position = coords;
+
                     object.push(particle);
-                    particles.vertices.push(particle);
+
+                    particles.vertices.push(particle.position);
 
                 }
 
+                console.log("Finished Generation");
+
                 var material = new THREE.ParticleBasicMaterial({color: 0xff03f0},{size: 3});
 
-                var particleSystem = new THREE.ParticleSystem(particles, material);
+                particleSystem = new THREE.ParticleSystem(particles, material);
 
                 scene.add(particleSystem);
 
@@ -197,36 +232,93 @@
 
                 function onMouseDown(event){
                     event.preventDefault();
+
                 }
 
                 function onScroll(event){
                     event.preventDefault();
-                    console.log(event.wheelDelta);
                     radius += event.wheelDelta/-10;
                 }
             }
 
-            function sphericalToCarteasian(radius, polar, azimuthal) {
+            function sphericalToCartesian(radius, inclination, azimuthal) {
                 var result = new THREE.Vector3();
-                result.x = radius * Math.sin(polar) * Math.cos(azimuthal);
-                result.y = radius * Math.sin(polar) * Math.sin(azimuthal);
-                result.z = radius * Math.cos(polar);
+                result.x = radius * Math.sin(inclination) * Math.cos(azimuthal);
+                result.y = radius * Math.sin(inclination) * Math.sin(azimuthal);
+                result.z = radius * Math.cos(inclination);
                 return result;
             }
 
+            function cartesianToSpherical(coords){
+                var x = coords.x;
+                var y = coords.y;
+                var z = coords.z;
+                var rad = Math.sqrt(x*x + y*y +z*z);
+                var inclination = Math.acos(z / Math.sqrt(x*x + y*y + z*z));
+                var azimuth = Math.atan(y / x);
+                return [rad, inclination, azimuth];
+            }
+
+            function sphericalToCylindrical(radius, inclination, azimuthal){
+                radius = radius * Math.cos(inclination);
+                azimuthal = azimuthal;
+                var z = radius * Math.sin(inclination);
+                return [radius, azimuthal, z];
+            }
+
+            function cylindricalToSpherical(radius, azimuthal, z){
+                radius = Math.sqrt(z^z + azimuthal*azimuthal);
+                var inclination = Math.atan(z / radius);
+                return [radius, inclination, azimuthal];
+            }
+
+            function cylindricalToCartesian(radius, azimuthal, z){
+                var x = radius * Math.cos(azimuthal);
+                var y = radius * Math.sin(azimuthal);
+                return new THREE.Vector3(x, y, z);
+            }
+
             function update(){
-                /*
-                for(var i = 0; i < object.length; i++){
-                    object[i].position.x += 1;
+
+                var count = object.length;
+
+                while(count--){
+
+                    var particle = object[count];
+                    var cyl = particle.cylPosition;
+                    cyl.azimuthal += 0.005;
+
+                    var coords = cylindricalToCartesian(cyl.radius, cyl.azimuthal, cyl.z);
+                    if(cyl.z  < cyl.radius && cyl.z > -cyl.radius){
+                        if(cyl.z > 0){
+                            cyl.z += 1;
+                        }else{
+                            cyl.z -= 1;
+                        }
+                    }
+                    particle.cylPosition = cyl;
+                    particle.position = coords;
+
+
+                    /*
+                    Transform using cyl, and convert to cartesian.
+                    Make Cyl expand to radius, then make in generate into a sphere. So it looks cool.
+                    var cyl = particle.cylPosition;
+                    var coords = cylTo
+                    */
+
+                    //particle.sphPosition = sph;
+                    particles.vertices[count] = particle.position;
+                    particles.verticesNeedUpdate = true;
                 }
-                */
+
             }
 
             function render() {
                 // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
                 requestAnimationFrame(render);
-                update();
 
+                update();
                 angle += 0.01;
                 //raycaster.setFromCamera(mouse, camera);
                 //var objects = raycaster.intersectObjects(scene.children);
@@ -237,13 +329,6 @@
                 //for( var i = 0; i < objects.length; i++)
                 //    objects[i].object.material.color.set(0xfffccc);
                 renderer.render( scene, camera );
-            }
-
-            function rotateCamera(focalPoint, radius, angle){
-                camera.lookAt(focalPoint);
-                camera.position.x  += radius * Math.sin(angle);
-                camera.position.z  = radius * Math.cos(angle);
-
             }
 
 
