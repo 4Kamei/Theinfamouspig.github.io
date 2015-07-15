@@ -52,6 +52,7 @@
                     notTrue = true,
                     toggle = [],
                     state = "init0",
+                    colours = [],
                     canvas = document.getElementById("canvas");
 
             init();
@@ -177,11 +178,25 @@
 
                 }
 
+                for( var i = 0; i < pCount; i++ ) {
+
+                    // random color
+                    colours[i] = new THREE.Color();
+                    colours[i].setHSL( Math.random(), 1.0, 0.5 );
+
+                }
+                particles.colors = colours;
+
                 console.log("Finished Generation");
 
-                var material = new THREE.ParticleBasicMaterial({color: 0xff03f0},{size: 3});
+                var material = new THREE.PointCloudMaterial({
+                    size: 4,
+                    transparent: false,
+                    opacity: 0.7,
+                    vertexColors: THREE.VertexColors
+                });
 
-                particleSystem = new THREE.ParticleSystem(particles, material);
+                particleSystem = new THREE.PointCloud(particles, material);
 
                 scene.add(particleSystem);
 
