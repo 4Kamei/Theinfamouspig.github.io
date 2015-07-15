@@ -42,7 +42,8 @@
                     canvasTop,
                     canvasWidth = 0,
                     canvasHeight = 0,
-                    radius = 900,
+                    radius = 300,
+                    zoom = 900,
                     raycaster,
                     particles,
                     particleSystem,
@@ -50,6 +51,7 @@
                     object = [],
                     notTrue = true,
                     toggle = [],
+                    state = "init0",
                     canvas = document.getElementById("canvas");
 
             init();
@@ -115,8 +117,10 @@
 
                 scene = new THREE.Scene();
                 camera = new THREE.PerspectiveCamera(80, WIDTH / HEIGHT, 1, 4000);
-                camera.position.z = 1000;
-
+                camera.position.z = zoom;
+                camera.position.y = zoom/3;
+                camera.position.x = zoom/3;
+                camera.lookAt(new THREE.Vector3(0, 0, 0));
                 var planeGeo = new THREE.PlaneGeometry( 2000, 2000 );
                 var planeMat = new THREE.MeshBasicMaterial( {color: 0x33333333, side: THREE.DoubleSide} );
 
@@ -127,47 +131,27 @@
 
                 particles = new THREE.Geometry;
 
-                var pCount = 5000;
+                var pCount = 4000;
                 toggle = Array.apply(null, new Array(pCount)).map(function(){ return true;});
                 for (var p = 0; p < pCount; p++) {
 
-                    //Generate polar coods to convert into carteasian to make it look nicer
-                    // and stop with the cube roots.
-
-                    //Carteasian Coord generation.
-
-                    /*
-                     var rad = 1000;
-                     do{
-                        var     x = Math.pow(Math.random(), 1/2)*rad-rad,
-                                y = Math.pow(Math.random(), 1/2)*rad-rad,
-                                z = Math.pow(Math.random(), 1/2)*rad-rad;
-                        x = Math.random() > 0.5 ? x * -1 : x;
-                        y = Math.random() > 0.5 ? y * -1 : y;
-                        z = Math.random() > 0.5 ? z * -1 : z;
-                    }while(x*x + y*y + z*z < 600*600 || x*x + y*y + z*z > 900*900);
-
-                    */
-
-                    var     rad = 400,
+                    var     rad = 1,
                             inclination,
                             azimuthal;
 
                     var     u = Math.random(),
                             v = Math.random();
 
-                    //Method of uniformly selecting points on the sphere using 2 random variables
-
                     azimuthal = Math.PI * 2 * u;
                     inclination = 0;
 
-                    var coords = sphericalToCartesian(rad, inclination, azimuthal);
+                    var coords = new THREE.Vector3(0, 0, 0);
                     var cylCoords = sphericalToCylindrical(rad, inclination, azimuthal);
 
                     var cylindrical= {
                         radius : cylCoords[0],
                         azimuthal : cylCoords[1],
-                        z : cylCoords[2] + Math.random() * 4 -2
+                        z : cylCoords[2] + Math.random() * 10 -2
                     };
 
                     var spherical = {
@@ -180,7 +164,7 @@
                         position: new THREE.Vector3(),
                         sphPosition: spherical,
                         cylPosition : cylindrical,
-                        velocity: new THREE.Vector3(0, 0,  cylCoords[2] + Math.random() * 4 -2)
+                        velocity: new THREE.Vector3(0, 0,  cylCoords[2] + Math.random() * 10)
                     };
 
                     particle.position = coords;
@@ -237,7 +221,7 @@
 
                 function onScroll(event){
                     event.preventDefault();
-                    radius += event.wheelDelta/-10;
+                    zoom += event.wheelDelta/-10;
                 }
             }
 
@@ -267,8 +251,8 @@
             }
 
             function cylindricalToSpherical(radius, azimuthal, z){
-                radius = Math.sqrt(z^z + azimuthal*azimuthal);
-                var inclination = Math.atan(z / radius);
+                radius = Math.sqrt(radius*radius + azimuthal*azimuthal);
+                var inclination = Math.atan(radius / z);
                 return [radius, inclination, azimuthal];
             }
 
@@ -283,31 +267,105 @@
                 var count = object.length;
 
                 while(count--){
-
                     var particle = object[count];
                     var cyl = particle.cylPosition;
-                    cyl.azimuthal += 0.005;
-
-                    var coords = cylindricalToCartesian(cyl.radius, cyl.azimuthal, cyl.z);
-                    if(cyl.z  < cyl.radius && cyl.z > -cyl.radius){
-                        if(cyl.z > 0){
-                            cyl.z += 1;
-                        }else{
-                            cyl.z -= 1;
+                    var sph = particle.sphPosition;
+                    var coords;
+                    if(state == "init0"){
+                        coords = cylindricalToCartesian(cyl.radius, cyl.azimuthal, cyl.z);
+                        if(cyl.z < radius && cyl.z > -radius){
+                            cyl.z += cyl.z/2.5;
+                            if(cyl.z >= radius || cyl.z <= -radius){
+                                if(object.every(function(element){return element.cylPosition.z >= radius || element.cylPosition.z <= -radius;})) {
+                                    state = "init1";
+                                }
+                            }
                         }
+                    }else if(state == "init1"){
+                        cyl.azimuthal += 0.02;
+                        cyl.radius += 300/radius;
+                        coords = cylindricalToCartesian(cyl.radius, cyl.azimuthal, cyl.z);
+
+                        var ct = object.length;
+                        if(cyl.radius >= radius){
+                            while (ct--) {
+                                object[ct].sphPosition.radius = 300;
+                                object[ct].cylPosition.radius = 300;
+                                state = "init2";
+                                var re = cylindricalToSpherical(300, object[ct].cylPosition.azimuthal, object[ct].cylPosition.z);
+                                object[ct].sphPosition.inclination = re[1];
+                                object[ct].sphPosition.azimuth = object[ct].cylPosition.azimuthal;
+                            }
+                        }
+                    }else if(state == "init2"){
+                        coords = cylindricalToCartesian(cyl.radius, cyl.azimuthal, cyl.z);
+                        if(cyl.z > 1 || cyl.z < -1){
+                           cyl.z -= cyl.z/10;
+                        }else{
+
+                        if(object.every(function(element){return element.cylPosition.z < 1 || element.cylPosition.z > -1;})){
+                            var ct2 = object.length;
+                            while (ct2--) {
+                                object[ct2].sphPosition.radius = 300;
+                                object[ct2].cylPosition.radius = 300;
+                                state = "init3";
+
+                                var re2 = cylindricalToSpherical(300, object[ct2].cylPosition.azimuthal, object[ct2].cylPosition.z);
+
+                                object[ct2].sphPosition.inclination = re2[1];
+                                object[ct2].sphPosition.azimuth = object[ct2].cylPosition.azimuthal;
+                            }
+                        }
+
+                        }
+
+                    }else if(state == "init3"){
+                        sph.azimuth += 0.01;
+                        sph.inclination += 0.03;
+                        coords = sphericalToCartesian(sph.radius, sph.inclination, sph.azimuth);
+                        if(sph.inclination >= Math.PI * 2 - 0.06){
+                            cyl.radius = radius;
+                            state = "init4";
+                        }
+                    }else if(state == "init4"){
+                        coords = sphericalToCartesian(sph.radius, sph.inclination, sph.azimuth);
+                        if(sph.radius > 4){
+                            sph.radius -= sph.radius/10;
+                        }else{
+                            state = "mainGen";
+                        }
+                    }else if(state == "mainGen"){
+                        var mainGenCount = object.length;
+                        while(mainGenCount--){
+                            var     rad = Math.random(),
+                                    inclination,
+                                    azimuthal;
+
+                            var     u = Math.random(),
+                                    v = Math.random();
+
+                            azimuthal = Math.atan(2*u - 1);
+                            inclination = Math.PI * 2 * v;
+
+                            object[mainGenCount].sphPosition.radius = sph.radius = rad;
+                            object[mainGenCount].sphPosition.azimuth = sph.azimuth = azimuthal;
+                            object[mainGenCount].sphPosition.inclination = sph.inclination = inclination;
+                            state = "main";
+                        }
+                    }else if(state == "main") {
+                        if(sph.radius < radius){
+                            sph.radius += sph.radius/10;
+                            if(sph.radius >= radius){
+                                sph.radius = radius;
+                            }
+                        }
+                        sph.inclination += 0.01;
+                        sph.azimuth += 0.01;
+                        coords = sphericalToCartesian(sph.radius, sph.inclination, sph.azimuth);
                     }
+                    particle.sphPosition = sph;
                     particle.cylPosition = cyl;
                     particle.position = coords;
-
-
-                    /*
-                    Transform using cyl, and convert to cartesian.
-                    Make Cyl expand to radius, then make in generate into a sphere. So it looks cool.
-                    var cyl = particle.cylPosition;
-                    var coords = cylTo
-                    */
-
-                    //particle.sphPosition = sph;
                     particles.vertices[count] = particle.position;
                     particles.verticesNeedUpdate = true;
                 }
@@ -322,9 +380,9 @@
                 angle += 0.01;
                 //raycaster.setFromCamera(mouse, camera);
                 //var objects = raycaster.intersectObjects(scene.children);
-                camera.position.x += (mouseNorm.x * canvasWidth - camera.position.x) * 0.1;
-                camera.position.y += (mouseNorm.y * canvasHeight - camera.position.y) * 0.1;
-                camera.position.z = radius;
+                camera.position.x += (mouseNorm.x * canvasWidth +400 - camera.position.x) * 0.1;
+                camera.position.y += (mouseNorm.y * canvasHeight + 400 - camera.position.y) * 0.1;
+                camera.position.z = zoom;
                 camera.lookAt(new THREE.Vector3(0, 0, 0));
                 //for( var i = 0; i < objects.length; i++)
                 //    objects[i].object.material.color.set(0xfffccc);
