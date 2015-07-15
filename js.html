@@ -121,6 +121,8 @@
                 camera.position.y = zoom/3;
                 camera.position.x = zoom/3;
                 camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+
                 var planeGeo = new THREE.PlaneGeometry( 2000, 2000 );
                 var planeMat = new THREE.MeshBasicMaterial( {color: 0x33333333, side: THREE.DoubleSide} );
 
@@ -344,24 +346,62 @@
                             var     u = Math.random(),
                                     v = Math.random();
 
-                            azimuthal = Math.atan(2*u - 1);
+                            azimuthal = Math.acos(2*u - 1);
                             inclination = Math.PI * 2 * v;
 
                             object[mainGenCount].sphPosition.radius = sph.radius = rad;
                             object[mainGenCount].sphPosition.azimuth = sph.azimuth = azimuthal;
                             object[mainGenCount].sphPosition.inclination = sph.inclination = inclination;
-                            state = "main";
+                            state = "main0";
                         }
-                    }else if(state == "main") {
+                    }else if(state == "main0") {
                         if(sph.radius < radius){
                             sph.radius += sph.radius/10;
                             if(sph.radius >= radius){
                                 sph.radius = radius;
                             }
+                        }else{
+                            if(sph.inclination != Math.PI/2){
+                                var sub = sph.inclination - Math.PI/2;
+                                if(sub < 0){
+                                    sph.inclination += 0.01;
+                                    if(sph.inclination > Math.PI/2)
+                                        sph.inclination = Math.PI/2;
+                                }else{
+                                    sph.inclination -= 0.01;
+                                    if(sph.inclination < Math.PI/2)
+                                        sph.inclination = Math.PI/2;
+                                }
+                                if(sph.inclination == Math.PI/2) {
+                                    if (object.every(function (element) {
+                                                return element.sphPosition.inclination == Math.PI/2
+                                            })) {
+                                        state = "main1";
+                                    }
+                                }
+                            }
                         }
-                        sph.inclination += 0.01;
                         sph.azimuth += 0.01;
                         coords = sphericalToCartesian(sph.radius, sph.inclination, sph.azimuth);
+                    }else if(state == "main1"){
+                        var main1GenCount = object.length;
+                        while(main1GenCount--) {
+                            var rad1 = Math.random(),
+                                    inclination1,
+                                    azimuthal1;
+
+                            var u1 = Math.random(),
+                                    v1 = Math.random();
+
+                            azimuthal1 = Math.PI * 2 * v1;
+                            inclination1 = Math.acos(2 * u1 - 1);
+
+                            object[main1GenCount].sphPosition.radius = sph.radius = rad1;
+                            object[main1GenCount].sphPosition.azimuth = sph.azimuth = azimuthal1;
+                            object[main1GenCount].sphPosition.inclination = sph.inclination = inclination1;
+                            state = "mainGen";
+                        }
+                            coords = sphericalToCartesian(sph.radius, sph.inclination, sph.azimuth);
                     }
                     particle.sphPosition = sph;
                     particle.cylPosition = cyl;
