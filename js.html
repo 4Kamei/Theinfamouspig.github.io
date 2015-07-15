@@ -31,6 +31,8 @@
     </canvas>
 
         <script src="packages/three.min.js"></script>
+        <script src="packages/perlin-noise-classic.js"></script>
+        <script src="packages/perlin-noise-simplex.min.js"></script>
         <script>
             var     scene,
                     camera,
@@ -43,7 +45,7 @@
                     canvasWidth = 0,
                     canvasHeight = 0,
                     radius = 300,
-                    zoom = 900,
+                    zoom = 400,
                     raycaster,
                     particles,
                     particleSystem,
@@ -53,6 +55,7 @@
                     toggle = [],
                     state = "init0",
                     colours = [],
+                    noise,
                     canvas = document.getElementById("canvas");
 
             init();
@@ -100,6 +103,8 @@
             };
 
             function init(){
+                noise = PerlinNoise
+                console.log(noise);
 
                 var ret = cartesianToSpherical(new THREE.Vector3(200, 200, 200));
                 var cartCoords = sphericalToCartesian(ret[0], ret[1], ret[2]);
@@ -128,63 +133,62 @@
                 var planeMat = new THREE.MeshBasicMaterial( {color: 0x33333333, side: THREE.DoubleSide} );
 
 
+                var scale = 8;
                 var plane = new THREE.Mesh( planeGeo, planeMat );
                 plane.rotation.x = Math.PI/2;
                 //scene.add( plane );
 
                 particles = new THREE.Geometry;
 
-                var pCount = 4000;
-                toggle = Array.apply(null, new Array(pCount)).map(function(){ return true;});
-                for (var p = 0; p < pCount; p++) {
+                var pCount = 200;
+                for(var x = 0; x < pCount; x++){
 
-                    var     rad = radius,
-                            inclination,
-                            azimuthal;
+                    for(var z = 0; z < pCount; z++){
 
-                    var     u = Math.random(),
-                            v = Math.random();
+                        var coords = new THREE.Vector3(scale * (x-pCount/2), noise.noise(scale * x/pCount, scale * z/pCount, 1) * 200, scale * (z-pCount/2));
+                        var cylindrical= {
+                            radius : 0,
+                            azimuthal : 0,
+                            z : 0
+                        };
 
-                    azimuthal = Math.PI * 2 * u;
-                    inclination = Math.acos(2*v - 1);
+                        var spherical = {
+                            radius: 0,
+                            inclination: 0,
+                            azimuth: 0
+                        };
 
-                    var coords = new THREE.Vector3(0, 0, 0);
-                    var cylCoords = sphericalToCylindrical(rad, inclination, azimuthal);
+                        var particle = {
+                            position: new THREE.Vector3(),
+                            sphPosition: spherical,
+                            cylPosition : cylindrical,
+                            velocity: new THREE.Vector3()
+                        };
 
-                    var cylindrical= {
-                        radius : cylCoords[0],
-                        azimuthal : cylCoords[1],
-                        z : cylCoords[2] + Math.random() * 10 -2
-                    };
 
-                    var spherical = {
-                        radius: rad,
-                        inclination: inclination,
-                        azimuth: azimuthal
-                    };
+                        particle.position = coords;
 
-                    var particle = {
-                        position: new THREE.Vector3(),
-                        sphPosition: spherical,
-                        cylPosition : cylindrical,
-                        velocity: new THREE.Vector3(0, 0,  cylCoords[2] + Math.random() * 10)
-                    };
+                        var sphRes = cartesianToSpherical(coords);
+                        particle.sphPosition.radius         = sphRes[0];
+                        particle.sphPosition.inclination    = sphRes[1];
+                        particle.sphPosition.azimuth        = sphRes[2];
 
-                    particle.position = coords;
+                        var cylRes = cartesianToCylindrical(coords);
 
-                    object.push(particle);
+                        particle.cylPosition.radius         = cylRes[0];
+                        particle.cylPosition.azimuthal      = cylRes[1];
+                        particle.cylPosition.z              = cylRes[2];
 
-                    particles.vertices.push(particle.position);
+                        particles.vertices.push(particle.position);
 
+                        object.push(particle);
+
+                        colours[object.length-1] = new THREE.Color();
+                        colours[object.length-1].setRGB(particle.position.y/200,0.5, 1-particle.position.y/200);
+
+                    }
                 }
 
-                for( var i = 0; i < pCount; i++ ) {
-
-                    // random color
-                    colours[i] = new THREE.Color();
-                    colours[i].setHSL( Math.random(), 1.0, 0.5 );
-
-                }
                 particles.colors = colours;
 
                 console.log("Finished Generation");
@@ -197,6 +201,7 @@
                 });
 
                 particleSystem = new THREE.PointCloud(particles, material);
+                particleSystem.position = new THREE.Vector3(-pCount/2, 0, -pCount/2);
 
                 scene.add(particleSystem);
 
@@ -250,6 +255,12 @@
                 return result;
             }
 
+            function cartesianToCylindrical(coords){
+                var radius = Math.sqrt(coords.x * coords.x + coords.y * coords.y)
+                var azimuth = Math.atan(coords.y / coords.x);
+                return [radius, azimuth, coords.z];
+            }
+
             function cartesianToSpherical(coords){
                 var x = coords.x;
                 var y = coords.y;
@@ -285,12 +296,8 @@
                     var particle = object[count];
                     var cyl = particle.cylPosition;
                     var sph = particle.sphPosition;
-                    var coords;
-                    {
-                        sph.azimuth += 0.01;
-                        coords = sphericalToCartesian(sph.radius, sph.inclination, sph.azimuth);
+                    var coords = particle.position;
 
-                    }
                     particle.sphPosition = sph;
                     particle.cylPosition = cyl;
                     particle.position = coords;
