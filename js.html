@@ -137,7 +137,7 @@
                 toggle = Array.apply(null, new Array(pCount)).map(function(){ return true;});
                 for (var p = 0; p < pCount; p++) {
 
-                    var     rad = 1,
+                    var     rad = radius,
                             inclination,
                             azimuthal;
 
@@ -145,7 +145,7 @@
                             v = Math.random();
 
                     azimuthal = Math.PI * 2 * u;
-                    inclination = 0;
+                    inclination = Math.acos(2*v - 1);
 
                     var coords = new THREE.Vector3(0, 0, 0);
                     var cylCoords = sphericalToCylindrical(rad, inclination, azimuthal);
@@ -265,143 +265,16 @@
             }
 
             function update(){
-
                 var count = object.length;
-
                 while(count--){
                     var particle = object[count];
                     var cyl = particle.cylPosition;
                     var sph = particle.sphPosition;
                     var coords;
-                    if(state == "init0"){
-                        coords = cylindricalToCartesian(cyl.radius, cyl.azimuthal, cyl.z);
-                        if(cyl.z < radius && cyl.z > -radius){
-                            cyl.z += cyl.z/2.5;
-                            if(cyl.z >= radius || cyl.z <= -radius){
-                                if(object.every(function(element){return element.cylPosition.z >= radius || element.cylPosition.z <= -radius;})) {
-                                    state = "init1";
-                                }
-                            }
-                        }
-                    }else if(state == "init1"){
-                        cyl.azimuthal += 0.02;
-                        cyl.radius += 300/radius;
-                        coords = cylindricalToCartesian(cyl.radius, cyl.azimuthal, cyl.z);
-
-                        var ct = object.length;
-                        if(cyl.radius >= radius){
-                            while (ct--) {
-                                object[ct].sphPosition.radius = 300;
-                                object[ct].cylPosition.radius = 300;
-                                state = "init2";
-                                var re = cylindricalToSpherical(300, object[ct].cylPosition.azimuthal, object[ct].cylPosition.z);
-                                object[ct].sphPosition.inclination = re[1];
-                                object[ct].sphPosition.azimuth = object[ct].cylPosition.azimuthal;
-                            }
-                        }
-                    }else if(state == "init2"){
-                        coords = cylindricalToCartesian(cyl.radius, cyl.azimuthal, cyl.z);
-                        if(cyl.z > 1 || cyl.z < -1){
-                           cyl.z -= cyl.z/10;
-                        }else{
-
-                        if(object.every(function(element){return element.cylPosition.z < 1 || element.cylPosition.z > -1;})){
-                            var ct2 = object.length;
-                            while (ct2--) {
-                                object[ct2].sphPosition.radius = 300;
-                                object[ct2].cylPosition.radius = 300;
-                                state = "init3";
-
-                                var re2 = cylindricalToSpherical(300, object[ct2].cylPosition.azimuthal, object[ct2].cylPosition.z);
-
-                                object[ct2].sphPosition.inclination = re2[1];
-                                object[ct2].sphPosition.azimuth = object[ct2].cylPosition.azimuthal;
-                            }
-                        }
-
-                        }
-
-                    }else if(state == "init3"){
-                        sph.azimuth += 0.01;
-                        sph.inclination += 0.03;
-                        coords = sphericalToCartesian(sph.radius, sph.inclination, sph.azimuth);
-                        if(sph.inclination >= Math.PI * 2 - 0.06){
-                            cyl.radius = radius;
-                            state = "init4";
-                        }
-                    }else if(state == "init4"){
-                        coords = sphericalToCartesian(sph.radius, sph.inclination, sph.azimuth);
-                        if(sph.radius > 4){
-                            sph.radius -= sph.radius/10;
-                        }else{
-                            state = "mainGen";
-                        }
-                    }else if(state == "mainGen"){
-                        var mainGenCount = object.length;
-                        while(mainGenCount--){
-                            var     rad = Math.random(),
-                                    inclination,
-                                    azimuthal;
-
-                            var     u = Math.random(),
-                                    v = Math.random();
-
-                            azimuthal = Math.acos(2*u - 1);
-                            inclination = Math.PI * 2 * v;
-
-                            object[mainGenCount].sphPosition.radius = sph.radius = rad;
-                            object[mainGenCount].sphPosition.azimuth = sph.azimuth = azimuthal;
-                            object[mainGenCount].sphPosition.inclination = sph.inclination = inclination;
-                            state = "main0";
-                        }
-                    }else if(state == "main0") {
-                        if(sph.radius < radius){
-                            sph.radius += sph.radius/10;
-                            if(sph.radius >= radius){
-                                sph.radius = radius;
-                            }
-                        }else{
-                            if(sph.inclination != Math.PI/2){
-                                var sub = sph.inclination - Math.PI/2;
-                                if(sub < 0){
-                                    sph.inclination += 0.01;
-                                    if(sph.inclination > Math.PI/2)
-                                        sph.inclination = Math.PI/2;
-                                }else{
-                                    sph.inclination -= 0.01;
-                                    if(sph.inclination < Math.PI/2)
-                                        sph.inclination = Math.PI/2;
-                                }
-                                if(sph.inclination == Math.PI/2) {
-                                    if (object.every(function (element) {
-                                                return element.sphPosition.inclination == Math.PI/2
-                                            })) {
-                                        state = "main1";
-                                    }
-                                }
-                            }
-                        }
+                    {
                         sph.azimuth += 0.01;
                         coords = sphericalToCartesian(sph.radius, sph.inclination, sph.azimuth);
-                    }else if(state == "main1"){
-                        var main1GenCount = object.length;
-                        while(main1GenCount--) {
-                            var rad1 = Math.random(),
-                                    inclination1,
-                                    azimuthal1;
 
-                            var u1 = Math.random(),
-                                    v1 = Math.random();
-
-                            azimuthal1 = Math.PI * 2 * v1;
-                            inclination1 = Math.acos(2 * u1 - 1);
-
-                            object[main1GenCount].sphPosition.radius = sph.radius = rad1;
-                            object[main1GenCount].sphPosition.azimuth = sph.azimuth = azimuthal1;
-                            object[main1GenCount].sphPosition.inclination = sph.inclination = inclination1;
-                            state = "mainGen";
-                        }
-                            coords = sphericalToCartesian(sph.radius, sph.inclination, sph.azimuth);
                     }
                     particle.sphPosition = sph;
                     particle.cylPosition = cyl;
