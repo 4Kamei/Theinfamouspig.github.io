@@ -132,19 +132,23 @@
                 var planeMat = new THREE.MeshBasicMaterial( {color: 0x33333333, side: THREE.DoubleSide} );
 
 
-                var scale = 8;
+                var scale = 4;
                 var plane = new THREE.Mesh( planeGeo, planeMat );
                 plane.rotation.x = Math.PI/2;
                 //scene.add( plane );
 
                 particles = new THREE.Geometry;
 
-                var pCount = 200;
+                var pCount = 400;
                 for(var x = 0; x < pCount; x++){
 
                     for(var z = 0; z < pCount; z++){
 
-                        var coords = new THREE.Vector3(scale * (x-pCount/2), noise.noise(scale * x/pCount, scale * z/pCount, 1) * 200, scale * (z-pCount/2));
+
+                        var coords = new THREE.Vector3(x + (Math.random() - 0.5)/100, 0 , z + (Math.random() - 0.5)/100);
+                        coords.y = 200 * noise.noise(scale * coords.x/pCount *2, scale * coords.z/pCount*2, 1);
+                        coords.x = scale * (coords.x-pCount/2);
+                        coords.z = scale * (coords.z-pCount/2);
                         var cylindrical= {
                             radius : 0,
                             azimuthal : 0,
