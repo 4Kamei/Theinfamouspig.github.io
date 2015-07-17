@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Kappa</title>
+    <title> Perlin </title>
     <link  type="text/css" rel="stylesheet" href="js.css">
     <link  type="text/css" rel="stylesheet" href="style.css">
 
@@ -21,7 +21,9 @@
                         <a class="buttonClicked">  Fancy Shit Right Here </a>
                     </span>
                     <span>
-                        <a class="button" href="computing/bubbleSort.html"> Sorting Algorithms </a>
+                        <a class="button" href="computing/bubbleSort.html"> heap sort
+                            bitonic sort
+                            Sorting Algorithms </a>
                     </span>
         </nav>
     </div>
@@ -102,7 +104,7 @@
             };
 
             function init(){
-                noise = PerlinNoise
+                noise = PerlinNoise;
                 console.log(noise);
 
                 var ret = cartesianToSpherical(new THREE.Vector3(200, 200, 200));
@@ -132,26 +134,31 @@
                 var planeMat = new THREE.MeshBasicMaterial( {color: 0x33333333, side: THREE.DoubleSide} );
 
 
-                var scale = 4;
                 var plane = new THREE.Mesh( planeGeo, planeMat );
                 plane.rotation.x = Math.PI/2;
                 //scene.add( plane );
 
                 particles = new THREE.Geometry;
 
-                var pCount = 400;
+                material = new THREE.LineBasicMaterial( { color: 0x330033, linewidth: 2, vertexColors: colours } );
+
+
+                var scale = 2;
+                var pCount = 600;
                 for(var x = 0; x < pCount; x++){
 
+                    var lineG = new THREE.Geometry();
                     for(var z = 0; z < pCount; z++){
-
-
                         var coords = new THREE.Vector3(x + (Math.random() - 0.5)/100, 0 , z + (Math.random() - 0.5)/100);
-                        coords.y = 200 * noise.noise(scale * coords.x/pCount *2, scale * coords.z/pCount*2, 1);
                         coords.x = scale * (coords.x-pCount/2);
                         coords.z = scale * (coords.z-pCount/2);
+                        coords.y = Math.sqrt(coords.x * coords.x + coords.z * coords.z) * 0.4 *  noise.noise(scale * coords.x/pCount *2, scale * coords.z/pCount*2, 1);
+                        lineG.vertices.push(coords);
+                        /*s
+
                         var cylindrical= {
                             radius : 0,
-                            azimuthal : 0,
+                            azimuth : 0,
                             z : 0
                         };
 
@@ -163,9 +170,9 @@
 
                         var particle = {
                             position: new THREE.Vector3(),
+                            velocity: new THREE.Vector3(),
                             sphPosition: spherical,
-                            cylPosition : cylindrical,
-                            velocity: new THREE.Vector3()
+                            cylPosition : cylindrical
                         };
 
 
@@ -185,12 +192,19 @@
                         particles.vertices.push(particle.position);
 
                         object.push(particle);
+                         */
 
                         colours[object.length-1] = new THREE.Color();
-                        colours[object.length-1].setRGB(particle.position.y/200,0.5, 1-particle.position.y/200);
+                        colours[object.length-1].setHSL(coords.y/100,0.5, 1- coords.y/100);
 
                     }
+                    material.vertexColors = colours;
+                    var line = new THREE.Line(lineG, material);
+                    line.colors = colours;
+                    scene.add(line);
+                    object.push(line);
                 }
+
 
                 particles.colors = colours;
 
@@ -230,7 +244,13 @@
                 canvas.addEventListener('mousemove', function(e){
                     onMouseMove(e);
                 });
+                canvas.addEventListener('keyboard', function(e){
+                    onKeyboard(e);
+                })
 
+                function onKeyboard(event){
+                    console.log(event.keyCode);
+                }
                 function onMouseMove(event){
                     event.preventDefault();
                     mouse.x = event.clientX - canvasLeft;
@@ -294,7 +314,7 @@
             }
 
             function update(){
-                var count = object.length;
+                var count = 0;//THU(OOSUDFHJ O(SDHFOISUHTFISUHDF
                 while(count--){
                     var particle = object[count];
                     var cyl = particle.cylPosition;
@@ -315,12 +335,13 @@
                 requestAnimationFrame(render);
 
                 update();
-                angle += 0.01;
+                angle += 0.001;
                 //raycaster.setFromCamera(mouse, camera);
                 //var objects = raycaster.intersectObjects(scene.children);
-                camera.position.x += (mouseNorm.x * canvasWidth +400 - camera.position.x) * 0.1;
-                camera.position.y += (mouseNorm.y * canvasHeight + 400 - camera.position.y) * 0.1;
-                camera.position.z = zoom;
+                var pos = cylindricalToCartesian(zoom, angle, zoom/3);
+                camera.position.x = pos.x;
+                camera.position.z = pos.y;
+                camera.position.y = pos.z;
                 camera.lookAt(new THREE.Vector3(0, 0, 0));
                 //for( var i = 0; i < objects.length; i++)
                 //    objects[i].object.material.color.set(0xfffccc);
