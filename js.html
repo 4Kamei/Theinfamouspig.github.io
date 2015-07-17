@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title> Perlin </title>
+    <title>Random Stuff</title>
     <link  type="text/css" rel="stylesheet" href="js.css">
     <link  type="text/css" rel="stylesheet" href="style.css">
 
@@ -21,9 +21,7 @@
                         <a class="buttonClicked">  Fancy Shit Right Here </a>
                     </span>
                     <span>
-                        <a class="button" href="computing/bubbleSort.html"> heap sort
-                            bitonic sort
-                            Sorting Algorithms </a>
+                        <a class="button" href="computing/bubbleSort.html"> Sorting Algorithms </a>
                     </span>
         </nav>
     </div>
@@ -107,10 +105,6 @@
                 noise = PerlinNoise;
                 console.log(noise);
 
-                var ret = cartesianToSpherical(new THREE.Vector3(200, 200, 200));
-                var cartCoords = sphericalToCartesian(ret[0], ret[1], ret[2]);
-                console.log(cartCoords.x + " : " + cartCoords.y + " : " + cartCoords.z);
-
                 mouse = new THREE.Vector2();
                 mouseNorm = new THREE.Vector2();
                 raycaster = new THREE.Raycaster();
@@ -138,27 +132,23 @@
                 plane.rotation.x = Math.PI/2;
                 //scene.add( plane );
 
+                /*
+
                 particles = new THREE.Geometry;
 
-                material = new THREE.LineBasicMaterial( { color: 0x330033, linewidth: 2, vertexColors: colours } );
-
-
-                var scale = 2;
-                var pCount = 600;
+                var pCount = 10;
                 for(var x = 0; x < pCount; x++){
 
-                    var lineG = new THREE.Geometry();
+                    var lineGeometryX = new THREE.Geometry();
+                    var lineGeometryZ = new THREE.Geometry();
+
                     for(var z = 0; z < pCount; z++){
-                        var coords = new THREE.Vector3(x + (Math.random() - 0.5)/100, 0 , z + (Math.random() - 0.5)/100);
-                        coords.x = scale * (coords.x-pCount/2);
-                        coords.z = scale * (coords.z-pCount/2);
-                        coords.y = Math.sqrt(coords.x * coords.x + coords.z * coords.z) * 0.4 *  noise.noise(scale * coords.x/pCount *2, scale * coords.z/pCount*2, 1);
-                        lineG.vertices.push(coords);
-                        /*s
+
+                        var coords = generatePoint(x, z, pCount/2, scale);
 
                         var cylindrical= {
                             radius : 0,
-                            azimuth : 0,
+                            azimuthal : 0,
                             z : 0
                         };
 
@@ -170,9 +160,9 @@
 
                         var particle = {
                             position: new THREE.Vector3(),
-                            velocity: new THREE.Vector3(),
                             sphPosition: spherical,
-                            cylPosition : cylindrical
+                            cylPosition : cylindrical,
+                            velocity: new THREE.Vector3()
                         };
 
 
@@ -191,36 +181,41 @@
 
                         particles.vertices.push(particle.position);
 
+                        lineGeometryX.vertices.push(coords);
                         object.push(particle);
-                         */
 
                         colours[object.length-1] = new THREE.Color();
-                        colours[object.length-1].setHSL(coords.y/100,0.5, 1- coords.y/100);
-
+                        colours[object.length-1] .setHSL(coords.y/100,0.5, 0.5);
                     }
-                    material.vertexColors = colours;
-                    var line = new THREE.Line(lineG, material);
-                    line.colors = colours;
-                    scene.add(line);
-                    object.push(line);
-                }
 
+                    lineGeometryX.colors = colours;
+                    var lineX = new THREE.Line(lineGeometryX, lineMaterial);
+                    var lineZ = new THREE.Line(lineGeometryZ, lineMaterial);
+                    scene.add(lineX);
+                    scene.add(lineZ);
+                }
 
                 particles.colors = colours;
 
+                 var material = new THREE.PointCloudMaterial({
+                 size: 4,
+                 transparent: false,
+                 opacity: 0.7,
+                 vertexColors: THREE.VertexColors
+                 });
+
+
+                 particleSystem = new THREE.PointCloud(particles, material);
+                 particleSystem.position = new THREE.Vector3(-pCount/2, 0, -pCount/2);
+
+                 scene.add(particleSystem);
+
+                */
+                generateTerrain();
                 console.log("Finished Generation");
 
-                var material = new THREE.PointCloudMaterial({
-                    size: 4,
-                    transparent: false,
-                    opacity: 0.7,
-                    vertexColors: THREE.VertexColors
-                });
 
-                particleSystem = new THREE.PointCloud(particles, material);
-                particleSystem.position = new THREE.Vector3(-pCount/2, 0, -pCount/2);
 
-                scene.add(particleSystem);
 
 
                 //scene.add(mesh);
@@ -244,13 +239,7 @@
                 canvas.addEventListener('mousemove', function(e){
                     onMouseMove(e);
                 });
-                canvas.addEventListener('keyboard', function(e){
-                    onKeyboard(e);
-                })
 
-                function onKeyboard(event){
-                    console.log(event.keyCode);
-                }
                 function onMouseMove(event){
                     event.preventDefault();
                     mouse.x = event.clientX - canvasLeft;
@@ -268,6 +257,56 @@
                     event.preventDefault();
                     zoom += event.wheelDelta/-10;
                 }
+            }
+
+            function generateTerrain(){
+                var lines = 400;
+                var scale = 4;
+                for(var x = -lines/2; x < lines/2; x++){
+                    scene.add(generateLine(x*scale, x*scale, -lines*scale/2, lines*scale/2, lines));
+                }
+                for(var z = -lines/2; z < lines/2; z++){
+                    scene.add(generateLine(-lines*scale/2, lines*scale/2, z*scale, z*scale, lines));
+                }
+
+            }
+
+            function generateLine(startX, endX, startZ, endZ, segments){
+                var material = new THREE.LineBasicMaterial({
+                    linewidth: 2,
+                    vertexColors: THREE.vertexColors
+                });
+                var point;
+                var lineGeometry = new THREE.Geometry;
+                var i = 0;
+                if(endX - startX != 0){
+                    var xIt = (endX - startX)/segments;
+                    var z =  (endZ - startZ)/(endX - startX);
+                    for(var xi = startX; xi != endX; xi += xIt, i++){
+                        point = generatePoint(xi, startZ +   z*xi);
+                        material.vertexColors[i] = new THREE.Color().setHSL(point.y*10, 0.5, 0.5);
+                        lineGeometry.vertices.push(point);
+                    }
+                    return new THREE.Line(lineGeometry, material);
+                }else{
+                    var zIt = (endZ - startZ)/segments;
+                    var x =  (endX - startX)/(endZ - startZ);
+                    for(var zi = startZ; zi != endZ; zi += zIt, i++){
+                        point = generatePoint(startX +   zi*x, zi);
+                        material.vertexColors[i++] = new THREE.Color().setHSL(point.y*10, 0.5, 0.5);
+                        lineGeometry.vertices.push(point);
+                    }
+                    return new THREE.Line(lineGeometry, material);
+
+
+                }
+            }
+
+            function generatePoint(x, z){
+                var distanceFromOrigin = Math.sqrt(x * x + z * z);
+                var noiseLevel = noise.noise(x, z, 1);
+                var y = distanceFromOrigin * noiseLevel * 0.2;
+                return new THREE.Vector3(x, y, z);
             }
 
             function sphericalToCartesian(radius, inclination, azimuthal) {
@@ -296,7 +335,6 @@
 
             function sphericalToCylindrical(radius, inclination, azimuthal){
                 radius = radius * Math.cos(inclination);
-                azimuthal = azimuthal;
                 var z = radius * Math.sin(inclination);
                 return [radius, azimuthal, z];
             }
@@ -314,34 +352,20 @@
             }
 
             function update(){
-                var count = 0;//THU(OOSUDFHJ O(SDHFOISUHTFISUHDF
-                while(count--){
-                    var particle = object[count];
-                    var cyl = particle.cylPosition;
-                    var sph = particle.sphPosition;
-                    var coords = particle.position;
-
-                    particle.sphPosition = sph;
-                    particle.cylPosition = cyl;
-                    particle.position = coords;
-                    particles.vertices[count] = particle.position;
-                    particles.verticesNeedUpdate = true;
-                }
 
             }
 
             function render() {
                 // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
                 requestAnimationFrame(render);
-
-                update();
                 angle += 0.001;
+                update();
                 //raycaster.setFromCamera(mouse, camera);
                 //var objects = raycaster.intersectObjects(scene.children);
-                var pos = cylindricalToCartesian(zoom, angle, zoom/3);
-                camera.position.x = pos.x;
-                camera.position.z = pos.y;
-                camera.position.y = pos.z;
+                var vectorC = cylindricalToCartesian(zoom, angle, zoom/2);
+                camera.position.y = vectorC.z;
+                camera.position.z = vectorC.y;
+                camera.position.x = vectorC.x;
                 camera.lookAt(new THREE.Vector3(0, 0, 0));
                 //for( var i = 0; i < objects.length; i++)
                 //    objects[i].object.material.color.set(0xfffccc);
