@@ -268,14 +268,12 @@
                         canvas.requestPointerLock = canvas.requestPointerLock ||
                                 canvas.mozRequestPointerLock ||
                                 canvas.webkitRequestPointerLock;
-
                         canvas.requestPointerLock()
                     }else{
                         document.exitPointerLock = document.exitPointerLock    ||
                                 document.mozExitPointerLock ||
                                 document.webkitExitPointerLock;
 
-// Attempt to unlock
                         document.exitPointerLock();
                     }
 
@@ -337,7 +335,7 @@
             }
             function generatePoint(x, z){
                 var distanceFromOrigin = Math.sqrt(x * x * 0.1 + z * z * 0.1);
-                var noiseLevel = PerlinNoise.noise(x, z, 0.2);
+                var noiseLevel = PerlinNoise.noise(x/20, z/20, 0.2);
                 var y = distanceFromOrigin * noiseLevel * 1/100 ;
                 return new THREE.Vector3(x, y, z);
             }
@@ -351,7 +349,7 @@
             }
 
             function cartesianToCylindrical(coords){
-                var radius = Math.sqrt(coords.x * coords.x + coords.y * coords.y)
+                var radius = Math.sqrt(coords.x * coords.x + coords.y * coords.y);
                 var azimuth = Math.atan(coords.y / coords.x);
                 return [radius, azimuth, coords.z];
             }
@@ -397,6 +395,10 @@
                 //raycaster.setFromCamera(mouse, camera);
                 //var objects = raycaster.intersectObjects(scene.children);
                 var vectorC = cylindricalToCartesian(zoom, angle, zoom/2);
+                camera.position.x = vectorC.x;
+                camera.position.y = vectorC.z;
+                camera.position.z = vectorC.y;
+
                 //for( var i = 0; i < objects.length; i++)
                 //    objects[i].object.material.color.set(0xfffccc);
                 renderer.render( scene, camera );
