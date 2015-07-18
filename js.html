@@ -32,6 +32,7 @@
 
         <script src="packages/three.min.js"></script>
         <script src="packages/perlin-noise-classic.js"></script>
+        <script src="packages/1d-noise.js"></script>
         <script>
             var     scene,
                     camera,
@@ -39,6 +40,7 @@
                     mesh,
                     mouse,
                     mouseNorm,
+                    mouseDelta,
                     canvasLeft,
                     canvasTop,
                     canvasWidth = 0,
@@ -52,9 +54,10 @@
                     object = [],
                     notTrue = true,
                     toggle = [],
+                    pointerLock = false,
                     state = "init0",
                     colours = [],
-                    noise,
+                    noise = PerlinNoise,
                     canvas = document.getElementById("canvas");
 
             init();
@@ -99,16 +102,16 @@
                 mouseNorm.x = 0;
                 mouseNorm.y = 0;
 
+
             };
 
             function init(){
-                noise = PerlinNoise;
-                console.log(noise);
 
                 mouse = new THREE.Vector2();
                 mouseNorm = new THREE.Vector2();
+                mouseDelta = new THREE.Vector2(0, 0);
                 raycaster = new THREE.Raycaster();
-
+                console.log(Simple1DNoise.getVal(1));
                 renderer = new THREE.WebGLRenderer({canvas: canvas}, {antialias:true});
 
                 var     WIDTH = canvas.clientWidth,
@@ -117,12 +120,13 @@
                 renderer.setSize(WIDTH, HEIGHT);
 
                 scene = new THREE.Scene();
-                camera = new THREE.PerspectiveCamera(80, WIDTH / HEIGHT, 1, 4000);
-                camera.position.z = zoom;
-                camera.position.y = zoom/3;
-                camera.position.x = zoom/3;
+                camera = new THREE.PerspectiveCamera(80, WIDTH / HEIGHT, 1, 40000);
+                camera.position.z = 0;
+                camera.position.y = 0;
+                camera.position.x = -1;
                 camera.lookAt(new THREE.Vector3(0, 0, 0));
-
+                camera.position.y = 10;
+                camera.position.x = 0;
 
                 var planeGeo = new THREE.PlaneGeometry( 2000, 2000 );
                 var planeMat = new THREE.MeshBasicMaterial( {color: 0x33333333, side: THREE.DoubleSide} );
@@ -240,16 +244,41 @@
                     onMouseMove(e);
                 });
 
-                function onMouseMove(event){
-                    event.preventDefault();
-                    mouse.x = event.clientX - canvasLeft;
-                    mouse.y = event.clientY - canvasTop;
-                    mouseNorm.x = ((event.clientX - canvasLeft) / canvasWidth) * 2 - 1;
-                    mouseNorm.y = - ((event.clientY - canvasTop ) / canvasHeight ) * 2 + 1;
+                function onMouseMove(event) {
+                    if (pointerLock) {
+                        console.log(event.movementX + " : " + event.movementY);
+                        camera.rotation.y -= event.movementX/500;
+                        //camera.rotation.z += event.movementY/500;
+                    }else{
+                        event.preventDefault();
+                        mouseDelta.x = mouse.x - (event - canvasLeft);
+                        mouseDelta.y = mouse.y - (event.clientY - canvasTop);
+                        mouse.x = event.clientX - canvasLeft;
+                        mouse.y = event.clientY - canvasTop;
+                        mouseNorm.x = ((event.clientX - canvasLeft) / canvasWidth) * 2 - 1;
+                        mouseNorm.y = -((event.clientY - canvasTop ) / canvasHeight ) * 2 + 1;
+                        console.log(mouseDelta);
+                    }
                 }
 
                 function onMouseDown(event){
                     event.preventDefault();
+                    pointerLock ^= true;
+                    if(pointerLock){
+                        canvas.requestPointerLock = canvas.requestPointerLock ||
+                                canvas.mozRequestPointerLock ||
+                                canvas.webkitRequestPointerLock;
+
+                        canvas.requestPointerLock()
+                    }else{
+                        document.exitPointerLock = document.exitPointerLock    ||
+                                document.mozExitPointerLock ||
+                                document.webkitExitPointerLock;
+
+// Attempt to unlock
+                        document.exitPointerLock();
+                    }
+
 
                 }
 
@@ -260,8 +289,8 @@
             }
 
             function generateTerrain(){
-                var lines = 400;
-                var scale = 4;
+                var lines = 600;
+                var scale = 2;
                 for(var x = -lines/2; x < lines/2; x++){
                     scene.add(generateLine(x*scale, x*scale, -lines*scale/2, lines*scale/2, lines));
                 }
@@ -274,38 +303,42 @@
             function generateLine(startX, endX, startZ, endZ, segments){
                 var material = new THREE.LineBasicMaterial({
                     linewidth: 2,
-                    vertexColors: THREE.vertexColors
+                    vertexColors: THREE.VertexColors
                 });
+
                 var point;
                 var lineGeometry = new THREE.Geometry;
                 var i = 0;
+                var col = [];
+
+                function lineHelp(x, z){
+                    point = generatePoint(x, z);
+                    //console.log(noise.noise(Math.abs(startX +   zi*x), Math.abs(zi), 203) + " is the noise at " + startX +   zi*x +  " and " + zi);
+                    col[i] = new THREE.Color().setHSL(point.y/5 + 0.6, 0.5, 0.5);
+                    point.y *= 40;
+                    lineGeometry.vertices.push(point);
+                }
+
                 if(endX - startX != 0){
                     var xIt = (endX - startX)/segments;
                     var z =  (endZ - startZ)/(endX - startX);
                     for(var xi = startX; xi != endX; xi += xIt, i++){
-                        point = generatePoint(xi, startZ +   z*xi);
-                        material.vertexColors[i] = new THREE.Color().setHSL(point.y*10, 0.5, 0.5);
-                        lineGeometry.vertices.push(point);
+                        lineHelp(xi, startZ +   z*xi);
                     }
-                    return new THREE.Line(lineGeometry, material);
                 }else{
                     var zIt = (endZ - startZ)/segments;
                     var x =  (endX - startX)/(endZ - startZ);
                     for(var zi = startZ; zi != endZ; zi += zIt, i++){
-                        point = generatePoint(startX +   zi*x, zi);
-                        material.vertexColors[i++] = new THREE.Color().setHSL(point.y*10, 0.5, 0.5);
-                        lineGeometry.vertices.push(point);
+                        lineHelp(startX +   zi*x, zi);
                     }
-                    return new THREE.Line(lineGeometry, material);
-
-
                 }
+                lineGeometry.colors = col;
+                return new THREE.Line(lineGeometry, material);
             }
-
             function generatePoint(x, z){
-                var distanceFromOrigin = Math.sqrt(x * x + z * z);
-                var noiseLevel = noise.noise(x, z, 1);
-                var y = distanceFromOrigin * noiseLevel * 0.2;
+                var distanceFromOrigin = Math.sqrt(x * x * 0.1 + z * z * 0.1);
+                var noiseLevel = PerlinNoise.noise(x, z, 0.2);
+                var y = distanceFromOrigin * noiseLevel * 1/100 ;
                 return new THREE.Vector3(x, y, z);
             }
 
@@ -360,13 +393,10 @@
                 requestAnimationFrame(render);
                 angle += 0.001;
                 update();
+                camera.position.y = zoom;
                 //raycaster.setFromCamera(mouse, camera);
                 //var objects = raycaster.intersectObjects(scene.children);
                 var vectorC = cylindricalToCartesian(zoom, angle, zoom/2);
-                camera.position.y = vectorC.z;
-                camera.position.z = vectorC.y;
-                camera.position.x = vectorC.x;
-                camera.lookAt(new THREE.Vector3(0, 0, 0));
                 //for( var i = 0; i < objects.length; i++)
                 //    objects[i].object.material.color.set(0xfffccc);
                 renderer.render( scene, camera );
