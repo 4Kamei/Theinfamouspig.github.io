@@ -31,7 +31,6 @@
             zoom = 400,
             raycaster,
             particles,
-            particleSystem,
             angle = 0,
             object = [],
             notTrue = true,
@@ -43,7 +42,12 @@
             time,
             movement,
             forward, backward, left, right,
+            updateZ = 0, updateX = 0,
+            drawDistance,
+            particleOffset = [],
             noise = PerlinNoise,
+            player,
+            particleMaterial, particleGeometry, particleSystem,
             canvas = document.getElementById("canvas");
 
     init();
@@ -51,11 +55,10 @@
 
     window.onload = window.onresize = function() {
         var     VPR = 0.95,   // canvas width to viewport width ratio
-                viewportWidth = window.outerWidth,
                 viewportHeight = window.outerHeight,
                 canvas = document.getElementById("canvas");
-        canvasWidth  = viewportWidth;
-        canvasHeight = viewportHeight;
+        canvasWidth  = window.innerWidth;
+        canvasHeight = window.innerHeight;
         renderer.setSize(canvasWidth, canvasHeight);
 
         camera.aspect = canvasWidth/canvasHeight;
@@ -85,16 +88,23 @@
         renderer.setSize(WIDTH, HEIGHT);
         clock = new THREE.Clock(true);
 
+        player = new THREE.Object3D();
+
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera(80, WIDTH / HEIGHT, 1, 40000);
+
         camera.position.z = 0;
         camera.position.y = 0;
-        camera.position.x = -1;
-        camera.lookAt(new THREE.Vector3(0, 0, 0));
-        camera.position.y = 10;
         camera.position.x = 0;
-        camera._order = "YZX";
-        camera.rotation.order = "YZX";
+
+
+        camera.rotation.x = 0;
+        camera.rotation.y = 0;
+
+
+        player._order = "YZX";
+        player.rotation.order = "YZX";
+
         var planeGeo = new THREE.PlaneGeometry( 2000, 2000 );
         var planeMat = new THREE.MeshBasicMaterial( {color: 0x33333333, side: THREE.DoubleSide} );
 
@@ -102,13 +112,24 @@
         var plane = new THREE.Mesh( planeGeo, planeMat );
         plane.rotation.x = Math.PI/2;
         //scene.add( plane );
+
+        particles = new THREE.Geometry();
+        particleMaterial = new THREE.PointCloudMaterial({
+                    size: 2,
+                    vertexColors: THREE.VertexColors
+                });
+
+        particleSystem = new THREE.PointCloud(particles, particleMaterial);
+
+        drawDistance = 70;
         generateTerrain();
+
+        player.add(camera);
+        scene.add(player);
+
         console.log("Finished Generation");
 
-        //scene.add(mesh)
-
-
-        scene.add(camera);
+        scene.add(player);
 
         renderer.setClearColor(0x222222, 1);
 
@@ -141,8 +162,24 @@
                 case 65 : left = true; break;
                 //d
                 case 68 : right = true; break;
+                //r (draw distance up)
+                case 82: {
+                    drawDistance += 10;
+                    break;
+                }
+                //f (draw distance down)
+                case 70: {
+                    drawDistance -= 10;
+                    break;
+                }
+                case 13: drawDistanceChange(); break;
+                //space
+                case 32: {
+                    jumping = true; break;
+                }
             }
         }
+
         function onKeyUp(event){
             switch (event.keyCode){
                 //w
@@ -155,13 +192,14 @@
                 case 68 : right = false; break;
             }
         }
+
         function onMouseMove(event) {
             event.preventDefault();
             if (pointerLock) {
                 console.log(event.movementX + " : " + event.movementY);
-                camera.rotation.y -= event.movementX/500;
-                camera.rotation.x -= event.movementY/500
-                camera.rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, camera.rotation.x));
+                player.rotation.y -= event.movementX/500;
+                player.rotation.x -= event.movementY/500
+                player.rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, player.rotation.x));
                 //camera.rotation.z += event.movementY/500;
             }else{
                 mouseDelta.x = mouse.x - (event );
@@ -181,12 +219,11 @@
                         canvas.mozRequestPointerLock ||
                         canvas.webkitRequestPointerLock;
                 canvas.requestPointerLock();
-                controls.enabled = true
+
             }else{
                 document.exitPointerLock = document.exitPointerLock    ||
                         document.mozExitPointerLock ||
                         document.webkitExitPointerLock;
-
                 document.exitPointerLock();
             }
         }
@@ -197,42 +234,66 @@
         }
     }
 
-    function generateTerrain(){
-        var     particles = new THREE.Geometry(),
-                pMaterial = new THREE.PointCloudMaterial({
-                    transparent: true,
-                    size: 2,
-                    opacity: 0.7,
-                    vertexColors: THREE.VertexColors
-                });
-
-        var lines = 300;
-        var scale = 20;
-
-        for(var x = -lines/2; x < lines/2; x++){
-            scene.add(generateLine(x*scale, x*scale, -lines*scale/2, lines*scale/2, lines));
-        }
-        for(var z = -lines/2; z < lines/2; z++){
-            scene.add(generateLine(-lines*scale/2, lines*scale/2, z*scale, z*scale, lines));
-        }
-
-        for(var i = -lines/2; i < lines/2; i++){
-            for(var j = -lines/2; j < lines/2; j++){
-                var point = generatePoint(i*scale, j*scale);
-                particles.vertices.push(point);
-                particles.colors = new THREE.Color().setHSL((Math.sin(point.y/200) + 1) * 0.5, + 0.6, 0.5, 0.5);
+    function drawDistanceChange(){
+        var scale = 1;
+        object = [];
+        particles.vertices = [];
+        var max = drawDistance * scale;
+        for(var i = -max/2; i < max/2; i += scale){
+            for(var j = -max/2; j < max/2; j += scale){
+                if(i*i + j*j < drawDistance*drawDistance*0.25){
+                    var point = generatePoint(i, j);
+                    point.x += camera.position.x;
+                    point.z += camera.position.z;
+                    object.push(point);
+                    particles.vertices.push(point);
+                    particles.colors = new THREE.Color().setHSL((Math.sin(point.y) + 1) * 0.5, + 0.6, 0.5, 0.5);
+                }
             }
         }
+    }
 
-        var particleSystem = new THREE.PointCloud(particles, pMaterial);
+    function generateTerrain(){
+        var vertArray = [];
+        var genLine;
+        var lines = 600,
+            scale = 0.5;
+        for(var x = -lines/2; x < lines/2; x++){
+            genLine = generateLine(x*scale, x*scale, -lines*scale/2, lines*scale/2, lines);
+            scene.add(genLine);
+            //vertArray.push(genLine.geometry.vertices);
+            //console.log(genLine.geometry.vertices);
+        }
+        for(var z = -lines/2; z < lines/2; z++){
+            genLine = generateLine(-lines*scale/2, lines*scale/2, z*scale, z*scale, lines);
+            scene.add(genLine);
+        }
+        //var holes = [];
+        //var triangles, mesh;
+        //var finalGeomerty = new THREE.Geometry();
+        //var finalMaterial = new THREE.MeshBasicMaterial( {color: 0x009900, wireframe: true });
 
-        scene.add(particleSystem);
+        //finalGeomerty.vertices = vertArray;
 
+        //triangles = THREE.Shape.Utils.triangulateShape(vertArray, holes);
+
+        //for(var i = 0;i < triangles.length;i++) {
+        //    finalGeomerty.faces.push(new THREE.Face3(triangles[i][0], triangles[i][1], triangles[i][2]));
+        //}
+
+        //mesh = new THREE.Mesh(finalGeomerty, finalMaterial);
+        //scene.add(mesh);
 
     }
-    function getColor(y){
-        if(y > 100){
 
+
+    function getColor(y){
+        if(y > 0.7){
+            return new THREE.Color().setHSL(0.74, 0.5, 1);
+        }else if(y > 0.2){
+            return new THREE.Color().setHSL(0.74, 0.5, y - 0.4);
+        }else if(y > 0){
+            return new THREE.Color(0, 0.29, 0.58);
         }
     }
 
@@ -250,8 +311,7 @@
         function lineHelp(x, z){
             point = generatePoint(x, z);
             //console.log(noise.noise(Math.abs(startX +   zi*x), Math.abs(zi), 203) + " is the noise at " + startX +   zi*x +  " and " + zi);
-            col[i] = new THREE.Color().setHSL((Math.sin(point.y/200) + 1) * 0.5, + 0.6, 0.5, 0.5);
-            point.y;
+            col[i] = getColor(point.y/40);
             lineGeometry.vertices.push(point);
         }
 
@@ -274,7 +334,7 @@
     function generatePoint(x, z){
         var yFunc = Math.abs(x*x * 0.0003 + 0.0003 * z*z);
         var noiseLevel = PerlinNoise.noise(x/20, z/20, 0.2);
-        var y = 40 * yFunc * noiseLevel*noiseLevel/100 ;
+        var y = 40 * noiseLevel ;
         return new THREE.Vector3(x, y, z);
     }
 
@@ -321,37 +381,49 @@
     }
 
     function update(){
-
+        var pCount = 0;
+        while(pCount--) {
+            var particle = particles.vertices[pCount];
+            particle.x -= updateX;
+            particle.z -= updateZ;
+            particle.y = generatePoint(particle.x, particle.z).y;
+            particles.vertices[pCount] = particle;
+        }
     }
 
     function render() {
         // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
         requestAnimationFrame(render);
         //angle += 0.001;
-        update();
         if(forward){
-            camera.position.z -= Math.cos(camera.rotation.y);
-            camera.position.x -= Math.sin(camera.rotation.y);
+            updateZ = Math.cos(player.rotation.y);
+            updateX = Math.sin(player.rotation.y);
         }
         if(backward){
-            camera.position.z += Math.cos(camera.rotation.y);
-            camera.position.x += Math.sin(camera.rotation.y);
+            updateZ = -Math.cos(player.rotation.y);
+            updateX = -Math.sin(player.rotation.y);
         }
         if(left){
-            camera.position.z -= Math.cos(camera.rotation.y + Math.PI/2);
-            camera.position.x -= Math.sin(camera.rotation.y + Math.PI/2);
+            updateZ = Math.cos(player.rotation.y + Math.PI/2);
+            updateX = Math.sin(player.rotation.y + Math.PI/2);
         }
         if(right){
-            camera.position.z -= Math.cos(camera.rotation.y - Math.PI/2);
-            camera.position.x -= Math.sin(camera.rotation.y - Math.PI/2);
+            updateZ = Math.cos(player.rotation.y - Math.PI/2);
+            updateX = Math.sin(player.rotation.y - Math.PI/2);
         }
-        camera.position.y = generatePoint(camera.position.x, camera.position.z).y + 10;
+        updateZ /= 30;
+        updateX /= 30;
+        update();
+        player.position.x -= updateX;
+        player.position.z -= updateZ;
+        updateX = 0;
+        updateZ = 0;
+        player.position.y = generatePoint(player.position.x, player.position.z).y + 2;
         //camera.position.y = zoom;
         //controls.isOnObject( false );
         //raycaster.setFromCamera(mouse, camera);
         //var objects = raycaster.intersectObjects(scene.children);
         var vectorC = cylindricalToCartesian(zoom, angle, zoom/2);
-        camera.rotation.pitch += 0.01;
         //for( var i = 0; i < objects.length; i++)
         //    objects[i].object.material.color.set(0xfffccc);				controls.update( Date.now() - time );
 
