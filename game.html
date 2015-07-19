@@ -41,7 +41,7 @@
             controls,
             time,
             movement,
-            forward, backward, left, right,
+            forward, backward, left, right, shiftHeld,
             updateZ = 0, updateX = 0,
             drawDistance,
             particleOffset = [],
@@ -177,6 +177,10 @@
                 case 32: {
                     jumping = true; break;
                 }
+                //shift
+                case 16: shiftHeld = true; break;
+
+
             }
         }
 
@@ -190,6 +194,8 @@
                 case 65 : left = false; break;
                 //d
                 case 68 : right = false; break;
+                //shift
+                case 16: shiftHeld = false; break;
             }
         }
 
@@ -411,8 +417,13 @@
             updateZ = Math.cos(player.rotation.y - Math.PI/2);
             updateX = Math.sin(player.rotation.y - Math.PI/2);
         }
-        updateZ /= 30;
-        updateX /= 30;
+        if(shiftHeld){
+            updateZ /= 15;
+            updateX /= 15;
+        }else{
+            updateZ /= 30;
+            updateX /= 30;
+        }
         update();
         player.position.x -= updateX;
         player.position.z -= updateZ;
