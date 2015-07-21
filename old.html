@@ -5,6 +5,17 @@
     <title>GameTitle</title>
 </head>
 <body>
+<div id="text">
+df
+</div>
+
+<style>
+    #canvas{
+        position: absolute;
+        left: 0;
+        top: 30px;
+    }
+</style>
 
 <canvas id="canvas"> </canvas>
 <script src="packages/three.min.js"></script>
@@ -194,7 +205,6 @@
         function onMouseMove(event) {
             event.preventDefault();
             if (pointerLock) {
-                console.log(event.movementX + " : " + event.movementY);
                 player.rotation.y -= event.movementX/500;
                 player.rotation.x -= event.movementY/500;
                 player.rotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, player.rotation.x));
@@ -276,7 +286,10 @@
                 //vertArray.push(genLine.geometry.vertices);
                 //console.log(genLine.geometry.vertices);
             }
+
             for(var z = -lines/2; z < lines/2; z++){
+
+                //generateDecals(-lines*scale/2, lines*scale/2, z*scale, z*scale, lines);
                 genLine = generateLine(-lines*scale/2, lines*scale/2, z*scale, z*scale, lines);
                 scene.add(genLine);
             }
@@ -307,6 +320,55 @@
             return new THREE.Color().setHSL(0.4, 0.5, y - 0.2);
         }else if(y > 0){
             return new THREE.Color(0, 0.29, 0.58);
+        }
+    }
+
+    function generateDecals(startX, endX, startZ, endZ, segments){
+        var material = new THREE.LineBasicMaterial({
+            linewidth: 2,
+            vertexColors: THREE.VertexColors
+        });
+        var point;
+        var lineGeometry;
+        var i = 0;
+        var col = [];
+
+        function genHelp(x, z){
+            if(Math.random() * 1000 < 1){
+                console.log("line generated at ", x, " : ", z);
+                lineGeometry = new THREE.Geometry;
+
+                point = generatePoint(x, z);
+                //console.log(noise.noise(Math.abs(startX +   zi*x), Math.abs(zi), 203) + " is the noise at " + startX +   zi*x +  " and " + zi);
+
+                col.push(new THREE.Color(0.58, 0.29, 0));
+                lineGeometry.vertices.push(point);
+
+                point.y += xIt;
+                col.push(new THREE.Color(0.58, 0.29, 0));
+                lineGeometry.vertices.push(point);
+
+                point.y += xIt;
+                col.push(new THREE.Color(0.58, 0.29, 0));
+                lineGeometry.vertices.push(point);
+
+                lineGeometry.colors = col;
+                scene.add(new THREE.Line(lineGeometry, material));
+            }
+        }
+
+        if(endX - startX != 0){
+            var xIt = (endX - startX)/segments;
+            var z =  (endZ - startZ)/(endX - startX);
+            for(var xi = startX; xi != endX; xi += xIt, i++){
+                genHelp(xi, startZ +   z*xi);
+            }
+        }else{
+            var zIt = (endZ - startZ)/segments;
+            var x =  (endX - startX)/(endZ - startZ);
+            for(var zi = startZ; zi != endZ; zi += zIt, i++){
+                genHelp(startX +   zi*x, zi);
+            }
         }
     }
 
@@ -410,6 +472,7 @@
         // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
         requestAnimationFrame(render);
         //angle += 0.001;
+        document.getElementById("text").textContent = player.position.x + " : " + player.position.y + " :" + player.position.z;
         if(forward){
             updateZ = Math.cos(player.rotation.y);
             updateX = Math.sin(player.rotation.y);
@@ -427,8 +490,8 @@
             updateX = Math.sin(player.rotation.y - Math.PI/2);
         }
         if(shiftHeld){
-            updateZ /= 15;
-            updateX /= 15;
+            updateZ /= 5;
+            updateX /= 5;
         }else{
             updateZ /= 30;
             updateX /= 30;
