@@ -82,7 +82,7 @@
         player = new THREE.Object3D();
 
         scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(80, WIDTH / HEIGHT, 1, 40000);
+        camera = new THREE.PerspectiveCamera(80, WIDTH / HEIGHT, 0.01, 40000);
 
         camera.position.z = 0;
         camera.position.y = 0;
@@ -301,10 +301,10 @@
 
 
     function getColor(y){
-        if(y > 0.7){
+        if(y > 0.8){
             return new THREE.Color().setHSL(0.74, 0.5, 1);
         }else if(y > 0.2){
-            return new THREE.Color().setHSL(0.74, 0.5, y - 0.4);
+            return new THREE.Color().setHSL(0.4, 0.5, y - 0.2);
         }else if(y > 0){
             return new THREE.Color(0, 0.29, 0.58);
         }
@@ -323,7 +323,8 @@
         function lineHelp(x, z){
             point = generatePoint(x, z);
             //console.log(noise.noise(Math.abs(startX +   zi*x), Math.abs(zi), 203) + " is the noise at " + startX +   zi*x +  " and " + zi);
-            col[i] = getColor(point.y/40);
+            col[i] = getColor(point.y);
+            point.y *= 40;
             lineGeometry.vertices.push(point);
         }
 
@@ -346,7 +347,9 @@
     function generatePoint(x, z){
         var yFunc = Math.abs(x*x * 0.0003 + 0.0003 * z*z);
         var noiseLevel = PerlinNoise.noise(x/50, z/50, 0.2);
-        var y = 40 * noiseLevel ;
+        var y = noiseLevel ;
+        if(y > 0.8)
+            y = y * (1 + (y - 0.8) * 2);
         return new THREE.Vector3(x, y, z);
     }
 
@@ -435,7 +438,7 @@
         player.position.z -= updateZ;
         updateX = 0;
         updateZ = 0;
-        player.position.y = generatePoint(player.position.x, player.position.z).y +  2;
+        player.position.y = generatePoint(player.position.x, player.position.z).y * 40 +  0.5;
         //camera.position.y = zoom;
         //controls.isOnObject( false );
         //raycaster.setFromCamera(mouse, camera);
