@@ -18,6 +18,9 @@
 <div id="text" style="position:absolute;top:5px;left:5px;color:white">
     PLAYER DATA AND STUFF AND THINGS
 </div>
+<div id="text1" style="position:absolute;top:35px;left:5px;color:white">
+    PLAYER DATA AND STUFF AND THINGS
+</div>
 <script src="packages/three.min.js"></script>
 <script src="packages/perlin-noise-classic.js"></script>
 <script>
@@ -58,7 +61,7 @@
     render();
 
     window.onload = window.onresize = function() {
-                canvas = document.getElementById("canvas");
+        canvas = document.getElementById("canvas");
         canvasWidth  = window.innerWidth;
         canvasHeight = window.innerHeight;
         renderer.setSize(canvasWidth, canvasHeight);
@@ -118,10 +121,10 @@
 
         particles = new THREE.Geometry();
         particleMaterial = new THREE.PointCloudMaterial({
-                    size: 1,
-                    color: 0xffffff,
-                    vertexColors: THREE.VertexColors
-                });
+            size: 1,
+            color: 0xffffff,
+            vertexColors: THREE.VertexColors
+        });
 
         generateTerrain();
 
@@ -274,33 +277,33 @@
         var genLine;
         var point;
         var lines = 600,
-            scale = 0.5;
+                scale = 0.5;
 
         /*
-        for(var x = -lines/2; x < lines/2; x++) {
-            for (var z = -lines / 2; z < lines / 2; z++) {
-                point = generatePoint(x*scale, z*scale);
-                particles.vertices.push(point);
-                particles.colors = new THREE.Color().setHSL((Math.sin(point.y) + 1) * 0.5, + 0.6, 0.5, 0.5);
+         for(var x = -lines/2; x < lines/2; x++) {
+         for (var z = -lines / 2; z < lines / 2; z++) {
+         point = generatePoint(x*scale, z*scale);
+         particles.vertices.push(point);
+         particles.colors = new THREE.Color().setHSL((Math.sin(point.y) + 1) * 0.5, + 0.6, 0.5, 0.5);
 
-            }
+         }
+         }
+
+         */
+
+        for(var x = -lines/2; x < lines/2; x++){
+            genLine = generateLine(x*scale, x*scale, -lines*scale/2, lines*scale/2, lines);
+            scene.add(genLine);
+            //vertArray.push(genLine.geometry.vertices);
+            //console.log(genLine.geometry.vertices);
         }
 
-        */
+        for(var z = -lines/2; z < lines/2; z++){
 
-            for(var x = -lines/2; x < lines/2; x++){
-                genLine = generateLine(x*scale, x*scale, -lines*scale/2, lines*scale/2, lines);
-                scene.add(genLine);
-                //vertArray.push(genLine.geometry.vertices);
-                //console.log(genLine.geometry.vertices);
-            }
-
-            for(var z = -lines/2; z < lines/2; z++){
-
-                //generateDecals(-lines*scale/2, lines*scale/2, z*scale, z*scale, lines);
-                genLine = generateLine(-lines*scale/2, lines*scale/2, z*scale, z*scale, lines);
-                scene.add(genLine);
-            }
+            //generateDecals(-lines*scale/2, lines*scale/2, z*scale, z*scale, lines);
+            genLine = generateLine(-lines*scale/2, lines*scale/2, z*scale, z*scale, lines);
+            scene.add(genLine);
+        }
 
         //var holes = [];
         //var triangles, mesh;
@@ -480,68 +483,83 @@
         player.position.x += player.velocity.x;
         player.position.z += player.velocity.z;
 
-        if(player.position.y > generatePoint(player.position.x, player.position.z).y * 40 +  0.5){
-            player.velocity.y -= 9.8 / 60;
+        if(inAir){
+            player.position.y += player.velocity.y;
+            player.velocity.y -= 0.006;
         }else{
-
+            player.velocity.y = 0;
         }
+
+        if(player.position.y < generatePoint(player.position.x, player.position.z).y * 40 +  0.5 && inAir) {
+            player.position.y = generatePoint(player.position.x, player.position.z).y * 40 +  0.5;
+            player.velocity.y = 0;
+            inAir = false;
+        }
+
     }
     function render() {
         // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
         requestAnimationFrame(render);
         //angle += 0.001;
-        document.getElementById("text").textContent = Math.floor(player.position.x) + " : " + Math.floor(player.position.y) + " :" + Math.floor(player.position.z);
-        if(forward){
-            updateZ = -Math.cos(player.rotation.y);
-            updateX = -Math.sin(player.rotation.y);
-        }
-        if(backward){
-            updateZ = Math.cos(player.rotation.y);
-            updateX = Math.sin(player.rotation.y);
-        }
-        if(left){
-            updateZ = Math.cos(player.rotation.y - Math.PI/2);
-            updateX = Math.sin(player.rotation.y - Math.PI/2);
-        }
-        if(right){
-            updateZ = Math.cos(player.rotation.y + Math.PI/2);
-            updateX = Math.sin(player.rotation.y + Math.PI/2);
-        }
-        if(!forward && !backward && !left && !right){
-            updateX = 0;
-            updateZ = 0;
-        }
-        if(shiftHeld && !crouching){
-            updateZ /= 5;
-            updateX /= 5;
-        }else{
-            if(!crouching){
-                updateZ /= 30;
-                updateX /= 30;
-            }else{
-                updateZ /= 40;
-                updateX /= 40;
+        document.getElementById("text").textContent = Math.floor(player.position.x) + " : " + Math.floor(player.position.y) + " : " + Math.floor(player.position.z);
+        document.getElementById("text1").textContent = Math.floor(player.velocity.x) + " : " + Math.floor(player.velocity.y) + " : " + Math.floor(player.velocity.z) + " : " + inAir;
+        if (!inAir) {
+            if (forward) {
+                player.velocity.z = -Math.cos(player.rotation.y);
+                player.velocity.x = -Math.sin(player.rotation.y);
+
             }
+            if (backward) {
+                player.velocity.z = Math.cos(player.rotation.y);
+                player.velocity.x = Math.sin(player.rotation.y);
+            }
+            if (left) {
+                player.velocity.z = Math.cos(player.rotation.y - Math.PI / 2);
+                player.velocity.x = Math.sin(player.rotation.y - Math.PI / 2);
+            }
+            if (right) {
+                player.velocity.z = Math.cos(player.rotation.y + Math.PI / 2);
+                player.velocity.x = Math.sin(player.rotation.y + Math.PI / 2);
+            }
+            if (!forward && !backward && !left && !right) {
+                player.velocity.x = 0;
+                player.velocity.z = 0;
+            }
+
+            if(shiftHeld && !crouching){
+                player.velocity.z /= 5;
+                player.velocity.x /= 5;
+            }else{
+                if(!crouching){
+                    player.velocity.z /= 30;
+                    player.velocity.x /= 30;
+                }else{
+                    player.velocity.z /= 40;
+                    player.velocity.x /= 40;
+                }
+            }
+
+            if(jumping){
+                player.velocity.y = .045;
+                inAir = true;
+                player.velocity.multiplyScalar(2);
+            }
+
         }
-        if(jumping && !inAir){
-            player.velocity.y = 5;
-        }
-        player.velocity.x = updateX;
-        player.velocity.z = updateZ;
+
+
+
 
         updatePhysics();
 
         update();
 
         if(!inAir){
-
             if(!crouching){
                 player.position.y = generatePoint(player.position.x, player.position.z).y * 40 +  0.5;
             }else{
                 player.position.y = generatePoint(player.position.x, player.position.z).y * 40 +  0.3;
             }
-        }else{
-
         }
         //camera.position.y = zoom;
         //controls.isOnObject( false );
