@@ -5,19 +5,19 @@
     <title>GameTitle</title>
 </head>
 <body>
-<div id="text">
-df
-</div>
 
 <style>
     #canvas{
         position: absolute;
         left: 0;
-        top: 30px;
+        top: 0;
     }
 </style>
 
 <canvas id="canvas"> </canvas>
+<div id="text" style="position:absolute;top:5px;left:5px;color:white">
+    PLAYER DATA AND STUFF AND THINGS
+</div>
 <script src="packages/three.min.js"></script>
 <script src="packages/perlin-noise-classic.js"></script>
 <script>
@@ -45,7 +45,7 @@ df
             controls,
             time,
             movement,
-            forward, backward, left, right, shiftHeld,
+            forward, backward, left, right, shiftHeld, jumping, crouching, inAir,
             updateZ = 0, updateX = 0,
             drawDistance,
             particleOffset = [],
@@ -106,6 +106,7 @@ df
 
         player._order = "YZX";
         player.rotation.order = "YZX";
+        player.velocity = new THREE.Vector3();
 
         var planeGeo = new THREE.PlaneGeometry( 2000, 2000 );
         var planeMat = new THREE.MeshBasicMaterial( {color: 0x33333333, side: THREE.DoubleSide} );
@@ -182,7 +183,8 @@ df
                 }
                 //shift
                 case 16: shiftHeld = true; break;
-
+                //control
+                case 67: crouching = true; break;
 
             }
         }
@@ -197,8 +199,14 @@ df
                 case 65 : left = false; break;
                 //d
                 case 68 : right = false; break;
+                //space
+                case 32: {
+                    jumping = false; break;
+                }
                 //shift
                 case 16: shiftHeld = false; break;
+                //control
+                case 67: crouching = false; break;
             }
         }
 
@@ -344,11 +352,11 @@ df
                 col.push(new THREE.Color(0.58, 0.29, 0));
                 lineGeometry.vertices.push(point);
 
-                point.y += xIt;
+                point.y += zIt;
                 col.push(new THREE.Color(0.58, 0.29, 0));
                 lineGeometry.vertices.push(point);
 
-                point.y += xIt;
+                point.y += zIt;
                 col.push(new THREE.Color(0.58, 0.29, 0));
                 lineGeometry.vertices.push(point);
 
@@ -357,14 +365,15 @@ df
             }
         }
 
+        var xIt = (endX - startX)/segments;
+        var zIt = (endZ - startZ)/segments;
+
         if(endX - startX != 0){
-            var xIt = (endX - startX)/segments;
             var z =  (endZ - startZ)/(endX - startX);
             for(var xi = startX; xi != endX; xi += xIt, i++){
                 genHelp(xi, startZ +   z*xi);
             }
         }else{
-            var zIt = (endZ - startZ)/segments;
             var x =  (endX - startX)/(endZ - startZ);
             for(var zi = startZ; zi != endZ; zi += zIt, i++){
                 genHelp(startX +   zi*x, zi);
@@ -467,41 +476,73 @@ df
             particles.vertices[pCount] = particle;
         }
     }
+    function updatePhysics(){
+        player.position.x += player.velocity.x;
+        player.position.z += player.velocity.z;
 
+        if(player.position.y > generatePoint(player.position.x, player.position.z).y * 40 +  0.5){
+            player.velocity.y -= 9.8 / 60;
+        }else{
+
+        }
+    }
     function render() {
         // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
         requestAnimationFrame(render);
         //angle += 0.001;
-        document.getElementById("text").textContent = player.position.x + " : " + player.position.y + " :" + player.position.z;
+        document.getElementById("text").textContent = Math.floor(player.position.x) + " : " + Math.floor(player.position.y) + " :" + Math.floor(player.position.z);
         if(forward){
-            updateZ = Math.cos(player.rotation.y);
-            updateX = Math.sin(player.rotation.y);
-        }
-        if(backward){
             updateZ = -Math.cos(player.rotation.y);
             updateX = -Math.sin(player.rotation.y);
         }
-        if(left){
-            updateZ = Math.cos(player.rotation.y + Math.PI/2);
-            updateX = Math.sin(player.rotation.y + Math.PI/2);
+        if(backward){
+            updateZ = Math.cos(player.rotation.y);
+            updateX = Math.sin(player.rotation.y);
         }
-        if(right){
+        if(left){
             updateZ = Math.cos(player.rotation.y - Math.PI/2);
             updateX = Math.sin(player.rotation.y - Math.PI/2);
         }
-        if(shiftHeld){
+        if(right){
+            updateZ = Math.cos(player.rotation.y + Math.PI/2);
+            updateX = Math.sin(player.rotation.y + Math.PI/2);
+        }
+        if(!forward && !backward && !left && !right){
+            updateX = 0;
+            updateZ = 0;
+        }
+        if(shiftHeld && !crouching){
             updateZ /= 5;
             updateX /= 5;
         }else{
-            updateZ /= 30;
-            updateX /= 30;
+            if(!crouching){
+                updateZ /= 30;
+                updateX /= 30;
+            }else{
+                updateZ /= 40;
+                updateX /= 40;
+            }
         }
+        if(jumping && !inAir){
+            player.velocity.y = 5;
+        }
+        player.velocity.x = updateX;
+        player.velocity.z = updateZ;
+
+        updatePhysics();
+
         update();
-        player.position.x -= updateX;
-        player.position.z -= updateZ;
-        updateX = 0;
-        updateZ = 0;
-        player.position.y = generatePoint(player.position.x, player.position.z).y * 40 +  0.5;
+
+        if(!inAir){
+
+            if(!crouching){
+                player.position.y = generatePoint(player.position.x, player.position.z).y * 40 +  0.5;
+            }else{
+                player.position.y = generatePoint(player.position.x, player.position.z).y * 40 +  0.3;
+            }
+        }else{
+
+        }
         //camera.position.y = zoom;
         //controls.isOnObject( false );
         //raycaster.setFromCamera(mouse, camera);
