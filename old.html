@@ -96,7 +96,7 @@
         player = new THREE.Object3D();
 
         scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(80, WIDTH / HEIGHT, 0.01, 40000);
+        camera = new THREE.PerspectiveCamera(80, WIDTH / HEIGHT, 0.01, 50000);
 
         camera.position.z = 0;
         camera.position.y = 0;
@@ -179,7 +179,7 @@
                     drawDistance -= 10;
                     break;
                 }
-                case 13: drawDistanceChange(); break;
+                case 13: break;
                 //space
                 case 32: {
                     jumping = true; break;
@@ -188,6 +188,7 @@
                 case 16: shiftHeld = true; break;
                 //control
                 case 67: crouching = true; break;
+
 
             }
         }
@@ -276,8 +277,8 @@
         var vertArray = [];
         var genLine;
         var point;
-        var lines = 600,
-                scale = 0.5;
+        var lines = 800,
+                scale = 4;
 
         /*
          for(var x = -lines/2; x < lines/2; x++) {
@@ -300,7 +301,7 @@
 
         for(var z = -lines/2; z < lines/2; z++){
 
-            //generateDecals(-lines*scale/2, lines*scale/2, z*scale, z*scale, lines);
+            generateDecals(-lines*scale/2, lines*scale/2, z*scale, z*scale, lines);
             genLine = generateLine(-lines*scale/2, lines*scale/2, z*scale, z*scale, lines);
             scene.add(genLine);
         }
@@ -355,11 +356,11 @@
                 col.push(new THREE.Color(0.58, 0.29, 0));
                 lineGeometry.vertices.push(point);
 
-                point.y += zIt;
+                point.y += 4;
                 col.push(new THREE.Color(0.58, 0.29, 0));
                 lineGeometry.vertices.push(point);
 
-                point.y += zIt;
+                point.y += 4;
                 col.push(new THREE.Color(0.58, 0.29, 0));
                 lineGeometry.vertices.push(point);
 
