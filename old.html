@@ -49,6 +49,7 @@
             time,
             movement,
             forward, backward, left, right, shiftHeld, jumping, crouching, inAir,
+            lastY, deltaY,
             updateZ = 0, updateX = 0,
             drawDistance,
             particleOffset = [],
@@ -480,6 +481,7 @@
             particles.vertices[pCount] = particle;
         }
     }
+
     function updatePhysics(){
         player.position.x += player.velocity.x;
         player.position.z += player.velocity.z;
@@ -498,12 +500,8 @@
         }
 
     }
-    function render() {
-        // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
-        requestAnimationFrame(render);
-        //angle += 0.001;
-        document.getElementById("text").textContent = Math.floor(player.position.x) + " : " + Math.floor(player.position.y) + " : " + Math.floor(player.position.z);
-        document.getElementById("text1").textContent = Math.floor(player.velocity.x) + " : " + Math.floor(player.velocity.y) + " : " + Math.floor(player.velocity.z) + " : " + inAir;
+
+    function updateControls(){
         if (!inAir) {
             if (forward) {
                 player.velocity.z = -Math.cos(player.rotation.y);
@@ -541,27 +539,32 @@
             }
 
             if(jumping){
-                player.velocity.y = .045;
+                player.velocity.y = .095 + deltaY;
                 inAir = true;
-                player.velocity.multiplyScalar(2);
+            }else{
+                deltaY = player.position.y - lastY;
+                lastY = player.position.y;
             }
-
-        }
-
-
-
-
-        updatePhysics();
-
-        update();
-
-        if(!inAir){
             if(!crouching){
                 player.position.y = generatePoint(player.position.x, player.position.z).y * 40 +  0.5;
             }else{
                 player.position.y = generatePoint(player.position.x, player.position.z).y * 40 +  0.3;
             }
         }
+    }
+
+    function render() {
+        // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
+        requestAnimationFrame(render);
+        //angle += 0.001;
+        document.getElementById("text").textContent = Math.floor(player.position.x) + " : " + Math.floor(player.position.y) + " : " + Math.floor(player.position.z);
+        document.getElementById("text1").textContent = Math.floor(player.velocity.x) + " (" + deltaY + ") : " + Math.floor(player.velocity.y) + " : " + Math.floor(player.velocity.z) + " : " + inAir;
+
+        updateControls();
+        updatePhysics();
+        update();
+
+
         //camera.position.y = zoom;
         //controls.isOnObject( false );
         //raycaster.setFromCamera(mouse, camera);
