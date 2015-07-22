@@ -488,7 +488,7 @@
 
         if(inAir){
             player.position.y += player.velocity.y;
-            player.velocity.y -= 0.006;
+            player.velocity.y -= 0.004;
         }else{
             player.velocity.y = 0;
         }
@@ -558,7 +558,7 @@
         requestAnimationFrame(render);
         //angle += 0.001;
         document.getElementById("text").textContent = Math.floor(player.position.x) + " : " + Math.floor(player.position.y) + " : " + Math.floor(player.position.z);
-        document.getElementById("text1").textContent = Math.floor(player.velocity.x) + " (" + deltaY + ") : " + Math.floor(player.velocity.y) + " : " + Math.floor(player.velocity.z) + " : " + inAir;
+        document.getElementById("text1").textContent = Math.floor(player.velocity.x) + " : " + Math.floor(player.velocity.y) + " (" + deltaY + ") : " + Math.floor(player.velocity.z) + " : " + inAir;
 
         updateControls();
         updatePhysics();
