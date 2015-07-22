@@ -120,7 +120,7 @@
 
         var plane = new THREE.Mesh( planeGeo, planeMat );
         plane.rotation.x = Math.PI/2;
-        //scene.add( plane );
+        scene.add( plane );
 
         particles = new THREE.Geometry();
         particleMaterial = new THREE.PointCloudMaterial({
@@ -141,6 +141,7 @@
 
         scene.add(player);
 
+        renderer.setClearAlpha(0.1);
         renderer.setClearColor(0x222222, 1);
 
         // Create a light, set its position, and add it to the scene.
