@@ -58,8 +58,6 @@
             particleMaterial, particleGeometry, particleSystem,
             canvas = document.getElementById("canvas");
 
-    init();
-    render();
 
     window.onload = window.onresize = function() {
         canvas = document.getElementById("canvas");
@@ -79,6 +77,10 @@
         mouseNorm.x = 0;
         mouseNorm.y = 0;
     };
+
+    init();
+    render();
+
 
     function init(){
 
@@ -279,7 +281,7 @@
         var genLine;
         var point;
         var lines = 800,
-                scale = 4;
+                scale = 0.5;
 
         /*
          for(var x = -lines/2; x < lines/2; x++) {
@@ -302,7 +304,7 @@
 
         for(var z = -lines/2; z < lines/2; z++){
 
-            generateDecals(-lines*scale/2, lines*scale/2, z*scale, z*scale, lines);
+            //generateDecals(-lines*scale/2, lines*scale/2, z*scale, z*scale, lines);
             genLine = generateLine(-lines*scale/2, lines*scale/2, z*scale, z*scale, lines);
             scene.add(genLine);
         }
@@ -421,11 +423,11 @@
         return new THREE.Line(lineGeometry, material);
     }
     function generatePoint(x, z){
-        var yFunc = Math.abs(x*x * 0.0003 + 0.0003 * z*z);
+        var yFunc = Math.sqrt(x*x*0.001 + z*z*0.001)/10;
         var noiseLevel = PerlinNoise.noise(x/50, z/50, 0.2);
-        var y = noiseLevel ;
+        var y = noiseLevel;
         if(y > 0.8)
-            y = y * (1 + (y - 0.8) * 2);
+            y = y * (1 + (y - 0.8) * 4);
         return new THREE.Vector3(x, y, z);
     }
 
@@ -557,8 +559,15 @@
         // Read more about requestAnimationFrame at http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
         requestAnimationFrame(render);
         //angle += 0.001;
-        document.getElementById("text").textContent = Math.floor(player.position.x) + " : " + Math.floor(player.position.y) + " : " + Math.floor(player.position.z);
-        document.getElementById("text1").textContent = Math.floor(player.velocity.x) + " : " + Math.floor(player.velocity.y) + " (" + deltaY + ") : " + Math.floor(player.velocity.z) + " : " + inAir;
+        document.getElementById("text").textContent = Math.floor(player.position.x)
+                + " : " + Math.floor(player.position.y)
+                + " : " + Math.floor(player.position.z);
+
+        document.getElementById("text1").textContent = Math.floor(player.velocity.x*100)/100
+                + " : " + Math.floor(player.velocity.y*100)/100
+                + " (" + Math.floor(deltaY*100)/100 + ") : "
+                + Math.floor(player.velocity.z*100)/100
+                + " : " + inAir;
 
         updateControls();
         updatePhysics();
