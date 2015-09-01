@@ -22,18 +22,6 @@ span + span{
 a {
     color: cornflowerblue;
 }
-h2 {
-    color: white;
-    position: absolute;
-    top: 0;
-    left: 10px;
-    width: 100%;
-}
-h3 {
-    text-align: center;
-    font-size: 24px;
-    background-color: #ffffff;
-}
 #spacer{
     padding-top: 15px;
 }
@@ -101,8 +89,7 @@ h3 {
     padding: 0 20px 10px 20px;
 }
 .content {
-    background-color: inherit;
     position: relative;
-    margin: 80px 300px 0px 300px;
-    padding: 10px;
+    margin: auto;
+    width: 60%;
 }

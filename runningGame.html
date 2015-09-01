@@ -21,6 +21,16 @@
 <div id="text1" style="position:absolute;top:35px;left:5px;color:white">
     PLAYER DATA AND STUFF AND THINGS
 </div>
+<div id="loading" style="position:fixed;top:50%;left:50%;transform:translate(-50%, -50%)">
+    Loading....
+</div>
+
+<div style="position:absolute;top:5px;right:5px;color:white;">
+    Left Click : Take control <br>
+    WASD       : Movement<br>
+    Shift      : Run <br>
+    Space      : Jump <br>
+</div>
 <script src="packages/three.min.js"></script>
 <script src="packages/perlin-noise-classic.js"></script>
 <script>
@@ -99,8 +109,7 @@
         player = new THREE.Object3D();
 
         scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(80, WIDTH / HEIGHT, 0.01, 50000);
-
+        camera = new THREE.PerspectiveCamera(80, WIDTH / HEIGHT, 0.01, 1000);
         camera.position.z = 0;
         camera.position.y = 0;
         camera.position.x = 0;
@@ -136,7 +145,6 @@
         scene.add(particleSystem);
         player.add(camera);
         scene.add(player);
-
         console.log("Finished Generation");
 
         scene.add(player);
@@ -278,11 +286,9 @@
     }
 
     function generateTerrain(){
-        var vertArray = [];
         var genLine;
-        var point;
         var lines = 800,
-                scale = 0.5;
+                scale = 1;
 
         /*
          for(var x = -lines/2; x < lines/2; x++) {
@@ -302,6 +308,7 @@
             //vertArray.push(genLine.geometry.vertices);
             //console.log(genLine.geometry.vertices);
         }
+        document.getElementById("loading").textContent = "50%";
 
         for(var z = -lines/2; z < lines/2; z++){
 
@@ -309,6 +316,8 @@
             genLine = generateLine(-lines*scale/2, lines*scale/2, z*scale, z*scale, lines);
             scene.add(genLine);
         }
+
+        document.getElementById("loading").textContent = "";
 
         //var holes = [];
         //var triangles, mesh;
@@ -424,7 +433,7 @@
         return new THREE.Line(lineGeometry, material);
     }
     function generatePoint(x, z){
-        var yFunc = Math.sqrt(x*x*0.001 + z*z*0.001)/10;
+        var yFunc = Math.abs(x*z);
         var noiseLevel = PerlinNoise.noise(x/50, z/50, 0.2);
         var y = noiseLevel;
         if(y > 0.8)
@@ -486,9 +495,8 @@
     }
 
     function updatePhysics(){
-        player.position.x += player.velocity.x;
-        player.position.z += player.velocity.z;
-
+            player.position.x += player.velocity.x;
+            player.position.z += player.velocity.z;
         if(inAir){
             player.position.y += player.velocity.y;
             player.velocity.y -= 0.004;

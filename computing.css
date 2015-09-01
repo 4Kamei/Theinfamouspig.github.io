@@ -6,7 +6,7 @@
     border-bottom: 1px solid #353;
 }
 #spacer2{
-    padding-top: 50px;
+    padding-top: 120px;
 }
 #spacer3{
     padding-top: 10px;
@@ -48,3 +48,12 @@
     padding: 10px;
     margin-top: 2342px;
 }
+.green{
+    color: green;
+}
+.grey{
+    color: grey;
+}
+span {
+    display: inline;
+ }
