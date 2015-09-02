@@ -24,3 +24,6 @@ h1, p {
     width: 120px;
     text-align: left;
 }
+.spacer{
+    height: 80px;
+}
